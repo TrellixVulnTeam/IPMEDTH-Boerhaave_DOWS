@@ -1,0 +1,35 @@
+<MyLayout>
+  BoxLayout:
+    orientation: 'vertical'
+    size: root.width, root.height
+
+    Label: 
+      id: my_label
+      text: 'Vraag 1'
+      value: 1
+
+    ProgressBar: 
+      id: my_progress_bar
+      value: .20
+      min: 0
+      max: 1
+      pos_hint: {'x': .1}
+      size_hint_x: .8
+
+      canvas: 
+        Color: 
+          rgb: 1, 1, 1
+        BorderImage: 
+          border: (12, 12, 12, 12)
+          pos: self.x, self.center_y - 12
+          size: self.width, 24
+          source: 'background_color_pb.png'
+        BorderImage:
+          border: [int(min(self.width * (self.value / float(self.max)) if self.max else 0, 12))] * 4
+          pos: self.x, self.center_y - 12
+          size: self.width * (self.value / float(self.max)) if self.max else 0, 24
+          source: 'progress_color_pb.png'
+    
+    Button: 
+      text: "Press Me!"
+      on_press: root.press_it()
