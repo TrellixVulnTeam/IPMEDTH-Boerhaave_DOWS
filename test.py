@@ -19,7 +19,7 @@ import time
 Builder.load_file('info.kv');
 Builder.load_file('error.kv')
 
-voorwerpPlaatsen = [1,1,1,1,1,0,1,0]
+voorwerpPlaatsen = [1,1,1,1,1,1,1,1]
 
 class RedCircle(Widget):
     pass
@@ -63,18 +63,14 @@ class MyGrid(GridLayout):
         if voorwerpPlaatsen.count(0) > 1:
             self.clear_widgets();
             popupLayout = ErrorPopUp()
-
             layout = GridLayout(cols= 4, size_hint=(0.6, 0.7))
-            print(layout.size)
             with layout.canvas.before:
                 Color(0, 1,  0, 0.25)
                 Rectangle(size=(layout.size))
-                print(layout.size)
             for rows in range(len(voorwerpPlaatsen)):
                 if voorwerpPlaatsen[rows] == 0:
                     #layout.add_widget(RedCircle())
                     popupLayout.tafel.add_widget(RedCircle())
-                    print(popupLayout.tafel.size)
                 else:
                     popupLayout.tafel.add_widget(GreenCircle())
 
@@ -88,24 +84,44 @@ class MyGrid(GridLayout):
             #print(line[0]);
             self.arduinoCheck(line)
 
+    #als een voorwerp wordt opgepakt, checkt welk voorwerp het is en of er teveel zijn opgetild
+    def optillenVoorwerpCheck(self, nummerNFCreader):
+        voorwerpPlaatsen[nummerNFCreader] = 0
+        if voorwerpPlaatsen.count(0) > 1:
+            self.checkErr()
+        else:
+            if nummerNFCreader == 0:
+                self.clear_widgets()
+                self.add_widget(InfoMoon())
+            if nummerNFCreader == 1:
+                self.clear_widgets()
+                self.add_widget(InfoSaturnMoon())
+            if nummerNFCreader == 2:
+                self.clear_widgets()
+                #self.add_widget(InfoSaturnMoon())
+            if nummerNFCreader == 3:
+                self.clear_widgets()
+                #self.add_widget(InfoSaturnMoon())
 
 
     def arduinoCheck(self, message):
-        print(message[0])
+        print(message)
+        numberReader = int(message[0])
         if "None" in message:
-            print("test")
-            #print(message[0])
-            #print(voorwerpPlaatsen[0])
-            numberReader = int(message[0])
-            print(numberReader)
-            voorwerpPlaatsen[numberReader] = 0
-            print(voorwerpPlaatsen)
-        if "sn" in message:
-            self.clear_widgets()
-            self.add_widget(InfoSaturnMoon())
-        if "mn" in message:
-            self.clear_widgets()
-            self.add_widget(InfoMoon())
+            self.optillenVoorwerpCheck(numberReader)
+        #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
+        elif numberReader == 0:
+            if "sn" in message:
+                self.clear_widgets()
+                voorwerpPlaatsen[numberReader] = 1
+            else:
+                print("error")
+        elif numberReader == 1:
+            if "mn" in message:
+                self.clear_widgets()
+                voorwerpPlaatsen[numberReader] = 1
+            else:
+                print("error")
 
 
 
