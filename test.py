@@ -74,14 +74,11 @@ class MyGrid(GridLayout):
                 else:
                     popupLayout.tafel.add_widget(GreenCircle())
 
-            #popupLayout.add_widget(layout)
-            #popupLayout.add_widget(Label(text="dit is een test"))
             self.add_widget(popupLayout)
 
     def timer(self, dt):
         if ser.in_waiting > 2:
             line = ser.readline().decode('utf-8').rstrip();
-            #print(line[0]);
             self.arduinoCheck(line)
 
     #als een voorwerp wordt opgepakt, checkt welk voorwerp het is en of er teveel zijn opgetild
@@ -105,23 +102,29 @@ class MyGrid(GridLayout):
 
 
     def arduinoCheck(self, message):
-        print(message)
-        numberReader = int(message[0])
-        if "None" in message:
-            self.optillenVoorwerpCheck(numberReader)
-        #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
-        elif numberReader == 0:
-            if "sn" in message:
-                self.clear_widgets()
-                voorwerpPlaatsen[numberReader] = 1
-            else:
-                print("error")
-        elif numberReader == 1:
-            if "mn" in message:
-                self.clear_widgets()
-                voorwerpPlaatsen[numberReader] = 1
-            else:
-                print("error")
+        #print(message)
+        #numberReader = int(message[0])
+        try:
+            print(message)
+            numberReader = int(message[0])
+            if "none" in message:
+                self.optillenVoorwerpCheck(numberReader)
+            #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
+            elif numberReader == 0:
+                if "sn" in message:
+                    self.clear_widgets()
+                    voorwerpPlaatsen[numberReader] = 1
+                else:
+                    print("error")
+            elif numberReader == 1:
+                if "mn" in message:
+                    self.clear_widgets()
+                    voorwerpPlaatsen[numberReader] = 1
+                else:
+                    print("error")
+        except:
+            print("error")
+
 
 
 
@@ -131,6 +134,7 @@ class MyApp(App):
         return MyGrid()
 
 if __name__ == "__main__":
+    #setup van de serial poort waar de pi naar luistert
     ser = serial.Serial('COM4', 9600, timeout=1)
     ser.reset_input_buffer()
     MyApp().run()
