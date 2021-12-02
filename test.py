@@ -76,6 +76,7 @@ class MyGrid(GridLayout):
 
             self.add_widget(popupLayout)
 
+    #timer function die checkt of er een bericht van de arduino binnen is
     def timer(self, dt):
         if ser.in_waiting > 2:
             line = ser.readline().decode('utf-8').rstrip();
@@ -87,23 +88,18 @@ class MyGrid(GridLayout):
         if voorwerpPlaatsen.count(0) > 1:
             self.checkErr()
         else:
+            self.clear_widgets()
             if nummerNFCreader == 0:
-                self.clear_widgets()
                 self.add_widget(InfoMoon())
             if nummerNFCreader == 1:
-                self.clear_widgets()
                 self.add_widget(InfoSaturnMoon())
             if nummerNFCreader == 2:
-                self.clear_widgets()
-                #self.add_widget(InfoSaturnMoon())
+                print("test")
             if nummerNFCreader == 3:
-                self.clear_widgets()
-                #self.add_widget(InfoSaturnMoon())
+                print("test")
 
 
     def arduinoCheck(self, message):
-        #print(message)
-        #numberReader = int(message[0])
         try:
             print(message)
             numberReader = int(message[0])
@@ -114,16 +110,30 @@ class MyGrid(GridLayout):
                 if "sn" in message:
                     self.clear_widgets()
                     voorwerpPlaatsen[numberReader] = 1
+                    self.terugzettenErrorCheck()
                 else:
                     print("error")
             elif numberReader == 1:
                 if "mn" in message:
                     self.clear_widgets()
                     voorwerpPlaatsen[numberReader] = 1
+                    self.terugzettenErrorCheck()
                 else:
                     print("error")
         except:
-            print("error")
+            print("verkeerde input")
+
+
+    #als een voorwerp terug gezet wordt, check of er nog één voorwerp vast wordt gehouden, zoja, geef info weer
+    def terugzettenErrorCheck(self):
+        if voorwerpPlaatsen.count(0) < 2:
+            for nfcreader in range(len(voorwerpPlaatsen)):
+                if voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 0:
+                    self.add_widget(InfoMoon())
+                elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 1:
+                    self.add_widget(InfoSaturnMoon())
+
+
 
 
 
