@@ -98,30 +98,40 @@ class MyGrid(GridLayout):
             if nummerNFCreader == 3:
                 print("test")
 
+    def antwoordBerichtChecken(self, message):
+        if "none" in message:
+            #TODO Antwoord weghalen van veld
+            print("voorwerp opgetilt")
+        elif "sn" in message:
+            #TODO ALLE ANTWOORDEN TOEVOEGEN
+            print("antwoord")
 
     def arduinoCheck(self, message):
-        try:
-            print(message)
-            numberReader = int(message[0])
-            if "none" in message:
-                self.optillenVoorwerpCheck(numberReader)
-            #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
-            elif numberReader == 0:
-                if "sn" in message:
-                    self.clear_widgets()
-                    voorwerpPlaatsen[numberReader] = 1
-                    self.terugzettenErrorCheck()
-                else:
-                    print("error")
-            elif numberReader == 1:
-                if "mn" in message:
-                    self.clear_widgets()
-                    voorwerpPlaatsen[numberReader] = 1
-                    self.terugzettenErrorCheck()
-                else:
-                    print("error")
-        except:
-            print("verkeerde input")
+        if(message[0] == 'a'):
+            self.antwoordBerichtChecken(message)
+        else:
+            try:
+                print(message)
+                numberReader = int(message[0])
+                if "none" in message:
+                    self.optillenVoorwerpCheck(numberReader)
+                #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
+                elif numberReader == 0:
+                    if "sn" in message:
+                        self.clear_widgets()
+                        voorwerpPlaatsen[numberReader] = 1
+                        self.terugzettenErrorCheck()
+                    else:
+                        print("error")
+                elif numberReader == 1:
+                    if "mn" in message:
+                        self.clear_widgets()
+                        voorwerpPlaatsen[numberReader] = 1
+                        self.terugzettenErrorCheck()
+                    else:
+                        print("error")
+            except:
+                print("verkeerde input")
 
 
     #als een voorwerp terug gezet wordt, check of er nog één voorwerp vast wordt gehouden, zoja, geef info weer
