@@ -4,9 +4,11 @@
 #define SS_PIN 10
 #define SS_2_PIN 5
 #define RST_PIN 9
+#define SS_ANSWER_PIN 3
 
-#define NR_OF_READERS   2
-byte ssPins[] = {SS_PIN, SS_2_PIN};
+#define NR_OF_READERS   3
+//SS_ANSWER_PIN als laatste
+byte ssPins[] = {SS_PIN, SS_2_PIN, SS_ANSWER_PIN};
 MFRC522 mfrc522[NR_OF_READERS];
 bool statusReaders[NR_OF_READERS];
 
@@ -34,7 +36,13 @@ void setup() {
 }
 
 void check_code(String code, uint8_t numberReader){
-  String arduinoMessage = String(numberReader);
+  String arduinoMessage;
+  //checkt of het de laatste nfc reader (antwoord) en zet de naam van de nfcreader in de message
+  if(numberReader == (NR_OF_READERS - 1)){
+     arduinoMessage = "a";
+  }else{
+     arduinoMessage = String(numberReader);
+  }
   if(code == " 04 77 42 7c b0 e9 30"){
     arduinoMessage = arduinoMessage + "_mn";
   }else if(code == " 04 77 42 ca c1 e4 30"){
@@ -54,6 +62,8 @@ void translate_input(byte * buffer, byte bufferSize, uint8_t numberReader ){
 
 void loop() {
   for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
+   // Serial.println(NR_OF_READERS);
+  
     if(mfrc522[reader].PICC_IsNewCardPresent() ){
       if(mfrc522[reader].PICC_ReadCardSerial()){
        // !! DIT IS GEEN REDUCANT CODE. HIERDOOR WERKT HET, LAAT DEZE REGEL STAAN !!!! 
@@ -68,12 +78,18 @@ void loop() {
       }
     }else{
         if(statusReaders[reader] == true){
-          String arduinoMessage = String(reader);
-          arduinoMessage = arduinoMessage + "_none";
-          Serial.println(arduinoMessage);
-         // Serial.print("geen kaart op ");
-        //  Serial.println(reader);
-          statusReaders[reader] = false;
+          //checkt of het de laatste nfc reader (antwoord) en maakt bericht welk reader een voorwerp opgetild is
+          if(reader == (NR_OF_READERS - 1))
+          {
+            String arduinoMessage = "a_none";
+            Serial.println(arduinoMessage);
+            statusReaders[reader] = false;
+          }else{
+            String arduinoMessage = String(reader);
+            arduinoMessage = arduinoMessage + "_none";
+            Serial.println(arduinoMessage);
+            statusReaders[reader] = false;
+          }
         }
     
       
