@@ -1,0 +1,74 @@
+
+
+<Instruction>:
+    canvas.before:
+        Color:
+            rgba: (	0.1, 0.1, 0.1,1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    GridLayout:
+        cols: 1
+        size: root.size
+
+        Label:
+            text_size: (self.width * 0.5), None
+            text: "Als u een object op pakt krijgt u extra informatie op het scherm"
+
+
+
+<InfoSaturnMoon>:
+    canvas.before:
+        Color:
+            rgba: (	0.1, 0.1, 0.1,1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    GridLayout:
+        cols: 2
+        size: root.size
+
+        BoxLayout:
+            canvas:
+                Color:
+                    rgb: 1, 1, 1
+                Ellipse:
+                    size: (self.width * 0.8) , (self.width * 0.8)
+                    source: 'images/titan.jpg'
+                    pos: [self.center_x - (self.width * 0.8)/2, self.center_y - (self.width * 0.8)/2]
+                    angle_start: 0
+                    angle_end: 360
+
+        Label:
+            text_size: self.width, None
+            padding_x: 50
+            #size: root.width, root.height
+            text: "In 1655 ontdekte Christiaan Huygens een maan rond Saturnus, Titan.    Huygens had met zijn broer een nieuwe telescoop gemaakt, waardoor ze beter verder in het zonnestelsel konden kijken, waardoor ze Titan ontdekt. Ze noemde te maan: 'Saturni Luna' (Saturnusmaan).Dit was de zesde maan dat ontdekt werd in het zonnestelsel. "
+
+<InfoMoon>:
+    canvas.before:
+        Color:
+            rgba: (	0.1, 0.1, 0.1,1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    GridLayout:
+        cols: 2
+        size: root.size
+
+        BoxLayout:
+            canvas:
+                Color:
+                    rgb: 1, 1, 1
+                Ellipse:
+                    size: (self.width * 0.8) , (self.width * 0.8)
+                    source: 'images/moon.jpg'
+                    pos: [self.center_x - (self.width * 0.8)/2, self.center_y - (self.width * 0.8)/2]
+                    angle_start: 0
+                    angle_end: 360
+
+        Label:
+            text_size: self.width, None
+            padding_x: 50
+            #size: root.width, root.height
+            text: "Galileo werkte in 1809 aan een eerste telescoop. Met deze telescoop ontdekte hij dat de maan niet een perfecte bol is. De maan had, net zoals de Aarde, bergen en dallen. Galileo berekende dat sommige bergen zelfs 6 km hoog waren. \n \n Robert Hooke stelde twee hypotheses op waarom deze bergen en dallen er waren in 1665. Hij beschreef dat het door een bombardement vanuit de ruimte komt of door vulkanische uitbarstingen op de maan."
