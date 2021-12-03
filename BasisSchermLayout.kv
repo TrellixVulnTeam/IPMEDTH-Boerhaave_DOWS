@@ -6,22 +6,22 @@
     padding: [100, 50, 100, 50]
 
     canvas.before:
-      Rectangle:  
+      Rectangle:
         pos: self.pos
         size: self.size
         source: 'images/background_image_stars.png'
-        
+
 
     BoxLayout:
       orientation: 'vertical'
 
-      canvas: 
+      canvas:
         Color:
           rgba: (1,1,1,1)
         Rectangle:
           pos: self.pos
           size: self.size
-      
+
       BoxLayout:
         orientation: 'vertical'
 
@@ -31,22 +31,22 @@
         padding: 100
         spacing: 50
 
-        canvas: 
+        canvas:
           Color:
             rgba: (21/255,21/255,21/255,1)
           Rectangle:
             pos: self.pos
             size: self.size
-        
 
 
-        ProgressBar: 
+
+        ProgressBar:
           id: my_progress_bar
           value: .20
           min: 0
           max: 1
           size_hint_x: 1
-          
+
 
           canvas:
             BorderImage:
@@ -54,12 +54,12 @@
               pos: self.x, self.center_y - 12
               size: self.width, 24
               source: 'images/background_color_pb.png'
-            BorderImage: 
+            BorderImage:
               border: [int(min(self.width * (self.value / float(self.max)) if self.max else 0, 12))] * 4
               pos: self.x, self.center_y - 12
               size: self.width * (self.value / float(self.max)) if self.max else 0, 24
               source: 'images/progress_color_pb.png'
-                
+
         Label:
           id: my_label
           text: 'Vraag 1'
@@ -74,26 +74,27 @@
           valign: 'middle'
           halign: 'center'
           value: 1
-      
+
       BoxLayout:
         orientation: 'horizontal'
         size_hint_y: None
         height: 50
 
-        canvas: 
+        canvas:
           Color:
             rgba: (0,0,0,1)
           Rectangle:
             pos: self.pos
             size: self.size
-      
-    
+
+
 
       BoxLayout:
+        id: info_scherm
         orientation: 'vertical'
         padding: [100, 0, 100, 0]
 
-        canvas: 
+        canvas:
           Color:
             rgba: (21/255,21/255,21/255,1)
           Rectangle:
@@ -107,31 +108,31 @@
           anchor_x: 'center'
           anchor_y: 'bottom'
 
-          # canvas: 
+          # canvas:
           #   Color:
           #     rgba: (1,1,0,1)
           #   Rectangle:
           #     pos: self.pos
           #     size: self.size
-          
+
           Label:
             text: 'Vind het juiste object bij de vraag'
             font_size: 54
             size_hint_y: None
             height: 100
-        
+
         AnchorLayout:
           pos_hint: {'x': 0, 'top': 1}
           anchor_x: 'center'
           anchor_y: 'center'
 
-          # canvas: 
+          # canvas:
           #   Color:
           #     rgba: (1,0,1,1)
           #   Rectangle:
           #     pos: self.pos
           #     size: self.size
-          
+
           Label:
             text_size: self.width, None
             halign: 'center'
@@ -140,7 +141,7 @@
             font_size: 96
             size_hint_y: None
             height: 100
-          
+
         # Button:
         #   text: 'Press Me!'
         #   size_hint_x: None
@@ -150,4 +151,3 @@
         #   height: 100
 
         #   on_press: root.press_it()
-          

@@ -30,10 +30,6 @@ class BackDrop(Widget):
     pass
 class ErrorPopUp(Widget):
     tafel= ObjectProperty()
-    tafel_1 = ObjectProperty()
-    tafel_2 = ObjectProperty()
-    tafel_3 = ObjectProperty()
-    tafel_4 = ObjectProperty()
 
 
     pass
@@ -52,8 +48,6 @@ class MyGrid(GridLayout):
         refresh_time = 0.5
         Clock.schedule_interval(self.timer, refresh_time)
         self.cols = 1
-
-
         self.info = GreenCircle();
         self.add_widget(self.info)
         #self.checkErr()
