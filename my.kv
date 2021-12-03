@@ -1,0 +1,31 @@
+<popupInhoudFout>:
+    Label:
+        text: "fout"
+        size_hint: 0.6, 0.2
+        pos_hint: {"x":0.2, "top":1}
+
+<popupInhoudGoed>:
+    Label:
+        text: "goed"
+        size_hint: 0.6, 0.2
+        pos_hint: {"x":0.2, "top":1}
+
+
+<MyGrid>:
+    cols :4
+    spacing :1
+    padding :[10,10]
+    size_hint :0.6, 0.2
+    pos_hint :{"x":0.2}
+    Button:
+        text: 'Antwoord 1'
+        on_press: root.fout(), print("Het antwoord is fout")
+    Button:
+        text: 'Antwoord 2'
+        on_press: root.goed(), print("Het antwoord is goed")
+    Button:
+        text: 'Antwoord 3'
+        on_press: root.fout(), print("Het antwoord is fout")
+    Button:
+        text: 'Antwoord 4'
+        on_press: root.fout(), print("Het antwoord is fout")
