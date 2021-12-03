@@ -9,6 +9,7 @@ Builder.load_file('BasisSchermLayout.kv')
 
 
 class MyLayout(Widget):
+
   def press_it(self):
     current = self.ids.my_progress_bar.value
     current_question = self.ids.my_label.value
@@ -22,6 +23,13 @@ class MyLayout(Widget):
     current += .20
     current_question += 1
 
+    self.question_choser()
+
+    self.ids.my_progress_bar.value = current
+    self.ids.my_label.value = current_question
+    self.ids.my_label.text = f'Vraag {self.ids.my_label.value}'
+  
+  def question_choser(self):
     questions = ['vraag1: testen', 'vraag2: Hallo', 'vraag3: hoi', 'vraag4: doeg']
 
     while len(questions) > 0:
@@ -29,12 +37,6 @@ class MyLayout(Widget):
       self.ids.my_label_question.text = index
       questions.remove(index)
       print(questions)
-
-    self.ids.my_progress_bar.value = current
-    self.ids.my_label.value = current_question
-    self.ids.my_label.text = f'Vraag {self.ids.my_label.value}'
-
-     
 
 
 class MyApp(App):
