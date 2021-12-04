@@ -91,14 +91,14 @@ class MyLayout(Widget):
                 else:
                     popupLayout.tafel.add_widget(GreenCircle())
 
-            popup = ModalView(size_hint=(None, None))
+            self.popup = ModalView(size_hint=(None, None))
             with popupLayout.backgrounderror.canvas.before:
                 Color(0.1,0.1,0.1, 1)
                 Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
             popupLayout.backgrounderror.size = self.size[0] / 2, self.size[1] / 2
             popupLayout.backgrounderror.pos = self.center_x / 2, self.center_y / 2
-            popup.add_widget(popupLayout)
-            popup.open()
+            self.popup.add_widget(popupLayout)
+            self.popup.open()
 
     #timer function die checkt of er een bericht van de arduino binnen is
     def timer(self, dt):
@@ -151,14 +151,14 @@ class MyLayout(Widget):
                 #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
                 elif numberReader == 0:
                     if "sn" in message:
-                        self.clear_widgets()
+                        self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 1:
                     if "mn" in message:
-                        self.clear_widgets()
+                        self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
@@ -170,6 +170,7 @@ class MyLayout(Widget):
 
     #als een voorwerp terug gezet wordt, check of er nog één voorwerp vast wordt gehouden, zoja, geef info weer
     def terugzettenErrorCheck(self):
+        self.popup.dismiss()
         if voorwerpPlaatsen.count(0) < 2:
             #loopt door de voorwerpen array heen en laat de informatie zien van één voorwerp dat opgetilt is
             for nfcreader in range(len(voorwerpPlaatsen)):
