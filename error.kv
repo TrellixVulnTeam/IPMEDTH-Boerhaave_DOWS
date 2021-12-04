@@ -19,6 +19,7 @@
             Ellipse:
                 size: (self.width * 0.8) , (self.width * 0.8)
                 pos: root.x, root.y
+                #pos: self.pos
                 angle_start: 0
                 angle_end: 360
 
@@ -35,27 +36,18 @@
 
 <ErrorPopUp>:
     tafel: tafel
-    canvas.before:
-        Color:
-            rgba: (	0.9, 0.9, 0.9,0.3)
-        Rectangle:
-            pos: self.pos
-            size: self.size
-    FloatLayout:
-        canvas.before:
-            Color:
-                rgba: (	0.1, 0.1, 0.1,1)
-            Rectangle:
-                pos: [(root.width * 0.7)/6,  (root.height * 0.5)/2]
-                size: (root.width * 0.7, root.height * 0.5)
-        size: (root.width * 0.7, root.height * 0.5)
+    backgrounderror: backgrounderror
+    AnchorLayout:
+        id: backgrounderror
+        anchor_x: 'center'
+        anchor_y: 'center'
         GridLayout:
-            id: tafel
-            cols: 4
-            pos: (root.width * 0.7)/6,  (root.height * 0.5)/2
-            size: (500, root.height * 0.5)
-
-        Label:
-            text: "Deze voorwerpen staan niet op de juiste plek"
-            font_size: 20
-            
+            cols: 1
+            GridLayout:
+                id: tafel
+                cols: 4
+                size_hint_x: 0.4
+            Label:
+                text: "Deze voorwerpen staan niet op de juiste plek"
+                size_hint_y: 0.5
+                font_size: 20

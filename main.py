@@ -6,6 +6,8 @@ from kivy.config import Config
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 from kivy.clock import Clock
+from kivy.uix.popup import Popup
+from kivy.uix.modalview import ModalView
 from kivy.graphics import Color, Rectangle, Canvas
 from kivy.properties import StringProperty, ObjectProperty
 
@@ -27,6 +29,7 @@ class BackDrop(Widget):
     pass
 class ErrorPopUp(Widget):
     tafel= ObjectProperty()
+    backgrounderror = ObjectProperty()
     pass
 class InfoSaturnMoon(Widget):
     pass
@@ -74,7 +77,7 @@ class MyLayout(Widget):
     def checkErr(self):
         count = 0
         if voorwerpPlaatsen.count(0) > 1:
-            self.clear_widgets();
+            #self.clear_widgets();
             popupLayout = ErrorPopUp()
             layout = GridLayout(cols= 4, size_hint=(0.6, 0.7))
             with layout.canvas.before:
@@ -86,7 +89,15 @@ class MyLayout(Widget):
                 else:
                     popupLayout.tafel.add_widget(GreenCircle())
 
-            self.add_widget(popupLayout)
+            #self.add_widget(popupLayout)
+            popup = ModalView(size_hint=(None, None))
+            with popupLayout.backgrounderror.canvas.before:
+                Color(0.1,0.1,0.1, 1)
+                Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
+            popupLayout.backgrounderror.size = self.size[0] / 2, self.size[1] / 2
+            popupLayout.backgrounderror.pos = self.center_x / 2, self.center_y / 2
+            popup.add_widget(popupLayout)
+            popup.open()
 
     #timer function die checkt of er een bericht van de arduino binnen is
     def timer(self, dt):
@@ -144,13 +155,15 @@ class MyLayout(Widget):
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
-            except:
+            except Exception as e:
                 print("verkeerde input")
+                print(e)
 
 
     #als een voorwerp terug gezet wordt, check of er nog één voorwerp vast wordt gehouden, zoja, geef info weer
     def terugzettenErrorCheck(self):
         if voorwerpPlaatsen.count(0) < 2:
+
             for nfcreader in range(len(voorwerpPlaatsen)):
                 if voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 0:
                     self.ids.info_scherm.add_widget(InfoMoon())
