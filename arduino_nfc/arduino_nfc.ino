@@ -64,9 +64,8 @@ void translate_input(byte * buffer, byte bufferSize, uint8_t numberReader ){
 }
 
 void resetScan(){
+  Serial.println("reset");
   for(uint8_t reader = 0; reader < NR_OF_READERS; reader++){
-    Serial.print("scanner momenteel: ");
-    Serial.println(statusReaders[reader]);
      if(mfrc522[reader].PICC_IsNewCardPresent() ){
         if(mfrc522[reader].PICC_ReadCardSerial()){
           
@@ -78,9 +77,14 @@ void resetScan(){
         }
      }
      else{
-      String arduinoMessage = String(reader);
-      arduinoMessage = arduinoMessage + "_none";
-      Serial.println(arduinoMessage);
+      if(reader == (NR_OF_READERS - 1)){
+        Serial.println("a_none");
+      }else{
+        String arduinoMessage = String(reader);
+        arduinoMessage = arduinoMessage + "_none";
+        Serial.println(arduinoMessage);
+      }
+     
      }
      delay(100);
   }
@@ -91,20 +95,16 @@ void loop() {
   if(digitalRead(pushButton)){
       if(digitalRead(pushButton) && !(buttonPressed)){
       buttonPressed = true;
-      Serial.println("reset");
       resetScan();
     }
   }
   //als de knop los gelaten wordt, return naar niet ingedrukte state
   else if( !(digitalRead(pushButton)) && buttonPressed){
-      Serial.print("in");
       buttonPressed = false;
   }
   //leest de veranderingen van de NFCreaders
   else{
     for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
-     // Serial.println(NR_OF_READERS);
-    
       if(mfrc522[reader].PICC_IsNewCardPresent() ){
         if(mfrc522[reader].PICC_ReadCardSerial()){
          // !! DIT IS GEEN REDUCANT CODE. HIERDOOR WERKT HET, LAAT DEZE REGEL STAAN !!!! 
