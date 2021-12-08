@@ -11,7 +11,7 @@ from kivy.uix.modalview import ModalView
 from kivy.graphics import Color, Rectangle, Canvas
 from kivy.properties import StringProperty, ObjectProperty
 
-# import serial
+import serial
 import time
 import random
 
@@ -42,8 +42,8 @@ class Instruction(Widget):
 class MyLayout(Widget):
     def __init__(self, **kwargs):
         super(MyLayout, self).__init__(**kwargs)
-        # refresh_time = 0.5
-        # Clock.schedule_interval(self.timer, refresh_time)
+        refresh_time = 0.5
+        Clock.schedule_interval(self.timer, refresh_time)
 
     def press_it(self):
         current = self.ids.my_progress_bar.value
@@ -103,10 +103,10 @@ class MyLayout(Widget):
             self.popup.open()
 
     #timer function die checkt of er een bericht van de arduino binnen is
-    # def timer(self, dt):
-    #     if ser.in_waiting > 2:
-    #         line = ser.readline().decode('utf-8').rstrip()
-    #         self.arduinoCheck(line)
+    def timer(self, dt):
+        if ser.in_waiting > 2:
+            line = ser.readline().decode('utf-8').rstrip()
+            self.arduinoCheck(line)
 
     #als een voorwerp wordt opgepakt, checkt welk voorwerp het is en of er teveel zijn opgetild
     def optillenVoorwerpCheck(self, nummerNFCreader):
@@ -196,6 +196,6 @@ if __name__ == '__main__':
   Config.set('graphics', 'window_state', 'maximized')
   Config.write()
   #setup van de serial poort waar de pi naar luistert
-  # ser = serial.Serial('COM4', 9600, timeout=1)
-  # ser.reset_input_buffer()
+  ser = serial.Serial('COM4', 9600, timeout=1)
+  ser.reset_input_buffer()
   MyApp().run()
