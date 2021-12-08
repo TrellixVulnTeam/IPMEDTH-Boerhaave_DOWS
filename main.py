@@ -142,6 +142,8 @@ class MyLayout(Widget):
         #als het met een a begint, dan gaat het om de antwoord reader
         if(message[0] == 'a'):
             self.antwoordBerichtChecken(message)
+        elif(message == "reset"):
+            print("reset")
         else:
             #filtert op slechte inputs. Alleen inputs van de arduino dat begint met een nummer of a worden toegelaten
             try:
