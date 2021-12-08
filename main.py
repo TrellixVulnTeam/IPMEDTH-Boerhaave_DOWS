@@ -6,6 +6,8 @@ from kivy.config import Config
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 from kivy.clock import Clock
+from kivy.uix.popup import Popup
+from kivy.uix.modalview import ModalView
 from kivy.graphics import Color, Rectangle, Canvas
 from kivy.properties import StringProperty, ObjectProperty
 
@@ -27,6 +29,7 @@ class BackDrop(Widget):
     pass
 class ErrorPopUp(Widget):
     tafel= ObjectProperty()
+    backgrounderror = ObjectProperty()
     pass
 class InfoSaturnMoon(Widget):
     pass
@@ -73,22 +76,31 @@ class MyLayout(Widget):
           print(questions)
 
 
+    #checkt of er een error is, als er meer dan 2 voorwerpen zijn opgetild
     def checkErr(self):
-        count = 0
         if voorwerpPlaatsen.count(0) > 1:
-            self.clear_widgets()
+            #maakt de layout van de pop
             popupLayout = ErrorPopUp()
             layout = GridLayout(cols= 4, size_hint=(0.6, 0.7))
+            #voegt de achtergrond toe aan de popup
             with layout.canvas.before:
                 Color(0, 1,  0, 0.25)
                 Rectangle(size=(layout.size))
+            #loopt door alle voorwerpen heen. Als een vorwerp is opgetild rood cirkel anders groen
             for rows in range(len(voorwerpPlaatsen)):
                 if voorwerpPlaatsen[rows] == 0:
                     popupLayout.tafel.add_widget(RedCircle())
                 else:
                     popupLayout.tafel.add_widget(GreenCircle())
 
-            self.add_widget(popupLayout)
+            self.popup = ModalView(size_hint=(None, None))
+            with popupLayout.backgrounderror.canvas.before:
+                Color(0.1,0.1,0.1, 1)
+                Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
+            popupLayout.backgrounderror.size = self.size[0] / 2, self.size[1] / 2
+            popupLayout.backgrounderror.pos = self.center_x / 2, self.center_y / 2
+            self.popup.add_widget(popupLayout)
+            self.popup.open()
 
     #timer function die checkt of er een bericht van de arduino binnen is
     # def timer(self, dt):
@@ -99,8 +111,10 @@ class MyLayout(Widget):
     #als een voorwerp wordt opgepakt, checkt welk voorwerp het is en of er teveel zijn opgetild
     def optillenVoorwerpCheck(self, nummerNFCreader):
         voorwerpPlaatsen[nummerNFCreader] = 0
+        #als er meer dan 2 voorwerpen zijn opgetilt, ga naar error scherm
         if voorwerpPlaatsen.count(0) > 1:
             self.checkErr()
+        #anders kijk welk voorwerp is opgetild en laat de info scherm zin
         else:
             self.ids.info_scherm.clear_widgets()
             if nummerNFCreader == 0:
@@ -112,6 +126,7 @@ class MyLayout(Widget):
             if nummerNFCreader == 3:
                 print("test")
 
+    #functie die checkt wat voor antwoord bericht er van de arduino wordt verstuurd
     def antwoordBerichtChecken(self, message):
         #a_none
         if "none" in message:
@@ -122,37 +137,44 @@ class MyLayout(Widget):
             #TODO ALLE ANTWOORDEN TOEVOEGEN
             print("antwoord")
 
+    #checkt het bericht dat de machine krijgt van de Arduino
     def arduinoCheck(self, message):
+        #als het met een a begint, dan gaat het om de antwoord reader
         if(message[0] == 'a'):
             self.antwoordBerichtChecken(message)
         else:
+            #filtert op slechte inputs. Alleen inputs van de arduino dat begint met een nummer of a worden toegelaten
             try:
                 print(message)
                 numberReader = int(message[0])
+                #een x_none bericht geeft aan dat een voorwerp is opgeteld op reader x (x = nummer)
                 if "none" in message:
                     self.optillenVoorwerpCheck(numberReader)
                 #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
                 elif numberReader == 0:
                     if "sn" in message:
-                        self.clear_widgets()
+                        self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 1:
                     if "mn" in message:
-                        self.clear_widgets()
+                        self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
-            except:
+            except Exception as e:
                 print("verkeerde input")
+                print(e)
 
 
     #als een voorwerp terug gezet wordt, check of er nog één voorwerp vast wordt gehouden, zoja, geef info weer
     def terugzettenErrorCheck(self):
+        self.popup.dismiss()
         if voorwerpPlaatsen.count(0) < 2:
+            #loopt door de voorwerpen array heen en laat de informatie zien van één voorwerp dat opgetilt is
             for nfcreader in range(len(voorwerpPlaatsen)):
                 if voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 0:
                     self.ids.info_scherm.add_widget(InfoMoon())
