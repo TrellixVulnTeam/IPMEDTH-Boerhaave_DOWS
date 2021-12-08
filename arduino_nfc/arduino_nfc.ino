@@ -3,12 +3,14 @@
 
 #define SS_PIN 10
 #define SS_2_PIN 5
+#define SS_3_PIN 8
+#define SS_4_PIN 7
 #define RST_PIN 9
 #define SS_ANSWER_PIN 3
 
-#define NR_OF_READERS   3
+#define NR_OF_READERS   5
 //SS_ANSWER_PIN als laatste
-byte ssPins[] = {SS_PIN, SS_2_PIN, SS_ANSWER_PIN};
+byte ssPins[] = {SS_PIN, SS_2_PIN, SS_3_PIN, SS_4_PIN, SS_ANSWER_PIN};
 MFRC522 mfrc522[NR_OF_READERS];
 bool statusReaders[NR_OF_READERS];
 
@@ -40,6 +42,7 @@ void setup() {
 
 void check_code(String code, uint8_t numberReader){
   String arduinoMessage;
+ // Serial.println(code);
   //checkt of het de laatste nfc reader (antwoord) en zet de naam van de nfcreader in de message
   if(numberReader == (NR_OF_READERS - 1)){
      arduinoMessage = "a";
@@ -50,6 +53,16 @@ void check_code(String code, uint8_t numberReader){
     arduinoMessage = arduinoMessage + "_mn";
   }else if(code == " 04 77 42 ca c1 e4 30"){
      arduinoMessage = arduinoMessage + "_sn";
+  }else if(code == " 04 77 42 d9 3f ea 30"){
+     arduinoMessage = arduinoMessage + "_ts";
+  }else if(code == " 04 77 42 07 4c d9 30"){
+     arduinoMessage = arduinoMessage + "_jm";
+  }else if(code == " 04 77 42 b7 aa e3 30"){
+     arduinoMessage = arduinoMessage + "_sc";
+  }else if(code == " 04 77 42 fb 87 df 30"){
+     arduinoMessage = arduinoMessage + "_rs";
+  }else{
+    arduinoMessage = "bad_read";
   }
   Serial.println(arduinoMessage);
 }
