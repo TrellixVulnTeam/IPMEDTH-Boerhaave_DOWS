@@ -9,12 +9,12 @@ from kivy.clock import Clock
 from kivy.graphics import Color, Rectangle, Canvas
 from kivy.properties import StringProperty, ObjectProperty
 
-import serial
+# import serial
 import time
 import random
 
 Builder.load_file('BasisSchermLayout.kv')
-Builder.load_file('info.kv');
+Builder.load_file('info.kv')
 Builder.load_file('error.kv')
 
 voorwerpPlaatsen = [1,1,1,1,1,1,1,1]
@@ -39,8 +39,8 @@ class Instruction(Widget):
 class MyLayout(Widget):
     def __init__(self, **kwargs):
         super(MyLayout, self).__init__(**kwargs)
-        refresh_time = 0.5
-        Clock.schedule_interval(self.timer, refresh_time)
+        # refresh_time = 0.5
+        # Clock.schedule_interval(self.timer, refresh_time)
 
     def press_it(self):
         current = self.ids.my_progress_bar.value
@@ -54,19 +54,21 @@ class MyLayout(Widget):
 
         current += .20
         current_question += 1
+        
+        self.ids.info_scherm.clear_widgets()
+        self.ids.info_scherm.add_widget(InfoMoon())
 
         self.question_choser()
 
         self.ids.my_progress_bar.value = current
         self.ids.my_label.value = current_question
         self.ids.my_label.text = f'Vraag {self.ids.my_label.value}'
-
+    
     def question_choser(self):
-        questions = ['vraag1: testen', 'vraag2: Hallo', 'vraag3: hoi', 'vraag4: doeg']
+        questions = ['nieuwe_vraag1', 'nieuwe_vraag2', 'nieuwe_vraag3', 'nieuwe_vraag4']
 
         while len(questions) > 0:
           index = random.choice(questions)
-          self.ids.my_label_question.text = index
           questions.remove(index)
           print(questions)
 
@@ -74,7 +76,7 @@ class MyLayout(Widget):
     def checkErr(self):
         count = 0
         if voorwerpPlaatsen.count(0) > 1:
-            self.clear_widgets();
+            self.clear_widgets()
             popupLayout = ErrorPopUp()
             layout = GridLayout(cols= 4, size_hint=(0.6, 0.7))
             with layout.canvas.before:
@@ -89,10 +91,10 @@ class MyLayout(Widget):
             self.add_widget(popupLayout)
 
     #timer function die checkt of er een bericht van de arduino binnen is
-    def timer(self, dt):
-        if ser.in_waiting > 2:
-            line = ser.readline().decode('utf-8').rstrip();
-            self.arduinoCheck(line)
+    # def timer(self, dt):
+    #     if ser.in_waiting > 2:
+    #         line = ser.readline().decode('utf-8').rstrip()
+    #         self.arduinoCheck(line)
 
     #als een voorwerp wordt opgepakt, checkt welk voorwerp het is en of er teveel zijn opgetild
     def optillenVoorwerpCheck(self, nummerNFCreader):
@@ -170,6 +172,6 @@ if __name__ == '__main__':
   Config.set('graphics', 'window_state', 'maximized')
   Config.write()
   #setup van de serial poort waar de pi naar luistert
-  ser = serial.Serial('COM4', 9600, timeout=1)
-  ser.reset_input_buffer()
+  # ser = serial.Serial('COM4', 9600, timeout=1)
+  # ser.reset_input_buffer()
   MyApp().run()

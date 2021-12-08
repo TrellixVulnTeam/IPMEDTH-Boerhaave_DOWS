@@ -48,13 +48,16 @@
 <InfoMoon>:
     canvas.before:
         Color:
-            rgba: (	0.1, 0.1, 0.1,1)
+            rgba: (	21/255,21/255,21/255,1)
         Rectangle:
             pos: self.pos
             size: self.size
-    GridLayout:
-        cols: 2
+
+            
+    BoxLayout:
+        oreintation: 'vertical'
         size: root.size
+        padding: [50, 0, 50, 100]
 
         BoxLayout:
             canvas:
@@ -70,5 +73,5 @@
         Label:
             text_size: self.width, None
             padding_x: 50
-            #size: root.width, root.height
+            font_size: 25
             text: "Galileo werkte in 1809 aan een eerste telescoop. Met deze telescoop ontdekte hij dat de maan niet een perfecte bol is. De maan had, net zoals de Aarde, bergen en dallen. Galileo berekende dat sommige bergen zelfs 6 km hoog waren. \n \n Robert Hooke stelde twee hypotheses op waarom deze bergen en dallen er waren in 1665. Hij beschreef dat het door een bombardement vanuit de ruimte komt of door vulkanische uitbarstingen op de maan."
