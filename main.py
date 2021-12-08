@@ -33,6 +33,10 @@ class ErrorPopUp(Widget):
     pass
 class InfoSaturnMoon(Widget):
     pass
+class InfoTelescoop(Widget):
+    pass
+class InfoJupiter(Widget):
+    pass
 class InfoMoon(Widget):
     pass
 class Instruction(Widget):
@@ -57,7 +61,7 @@ class MyLayout(Widget):
 
         current += .20
         current_question += 1
-        
+
         self.ids.info_scherm.clear_widgets()
         self.ids.info_scherm.add_widget(InfoMoon())
 
@@ -66,7 +70,7 @@ class MyLayout(Widget):
         self.ids.my_progress_bar.value = current
         self.ids.my_label.value = current_question
         self.ids.my_label.text = f'Vraag {self.ids.my_label.value}'
-    
+
     def question_choser(self):
         questions = ['nieuwe_vraag1', 'nieuwe_vraag2', 'nieuwe_vraag3', 'nieuwe_vraag4']
 
@@ -122,9 +126,9 @@ class MyLayout(Widget):
             if nummerNFCreader == 1:
                 self.ids.info_scherm.add_widget(InfoSaturnMoon())
             if nummerNFCreader == 2:
-                print("test")
+                self.ids.info_scherm.add_widget(InfoTelescoop())
             if nummerNFCreader == 3:
-                print("test")
+                self.ids.info_scherm.add_widget(InfoJupiter())
 
     #functie die checkt wat voor antwoord bericht er van de arduino wordt verstuurd
     def antwoordBerichtChecken(self, message):
@@ -154,14 +158,29 @@ class MyLayout(Widget):
                     self.optillenVoorwerpCheck(numberReader)
                 #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
                 elif numberReader == 0:
-                    if "sn" in message:
+                    if "mn" in message:
                         self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 1:
-                    if "mn" in message:
+                    if "sn" in message:
+                        print("in")
+                        self.ids.info_scherm.clear_widgets()
+                        voorwerpPlaatsen[numberReader] = 1
+                        self.terugzettenErrorCheck()
+                    else:
+                        print("error")
+                elif numberReader == 2:
+                    if "ts" in message:
+                        self.ids.info_scherm.clear_widgets()
+                        voorwerpPlaatsen[numberReader] = 1
+                        self.terugzettenErrorCheck()
+                    else:
+                        print("error")
+                elif numberReader == 3:
+                    if "jm" in message:
                         self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
@@ -182,6 +201,10 @@ class MyLayout(Widget):
                     self.ids.info_scherm.add_widget(InfoMoon())
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 1:
                     self.ids.info_scherm.add_widget(InfoSaturnMoon())
+                elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 2:
+                    self.ids.info_scherm.add_widget(InfoTelescoop())
+                elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 3:
+                    self.ids.info_scherm.add_widget(InfoJupiter())
 
 
 
