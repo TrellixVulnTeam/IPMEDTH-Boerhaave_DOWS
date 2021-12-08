@@ -53,7 +53,7 @@
             pos: self.pos
             size: self.size
 
-            
+
     BoxLayout:
         oreintation: 'vertical'
         size: root.size
@@ -75,3 +75,65 @@
             padding_x: 50
             font_size: 25
             text: "Galileo werkte in 1809 aan een eerste telescoop. Met deze telescoop ontdekte hij dat de maan niet een perfecte bol is. De maan had, net zoals de Aarde, bergen en dallen. Galileo berekende dat sommige bergen zelfs 6 km hoog waren. \n \n Robert Hooke stelde twee hypotheses op waarom deze bergen en dallen er waren in 1665. Hij beschreef dat het door een bombardement vanuit de ruimte komt of door vulkanische uitbarstingen op de maan."
+
+<InfoTelescoop>:
+    canvas.before:
+        Color:
+            rgba: (	21/255,21/255,21/255,1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+    BoxLayout:
+        oreintation: 'vertical'
+        size: root.size
+        padding: [50, 0, 50, 100]
+
+        BoxLayout:
+            canvas:
+                Color:
+                    rgb: 1, 1, 1
+                Ellipse:
+                    size: (self.width * 0.8) , (self.width * 0.8)
+                    source: 'images/telescope.jpg'
+                    pos: [self.center_x - (self.width * 0.8)/2, self.center_y - (self.width * 0.8)/2]
+                    angle_start: 0
+                    angle_end: 360
+
+        Label:
+            text_size: self.width, None
+            padding_x: 50
+            font_size: 25
+            text: "De refractor telescoop was één van de eerste optische telescopen. Een Nederlandse glazen maker, Hans Lipperhey, had in 1608 de eerste refractor telescoop gemaakt. Maar het was Galileo Galilei die als een refractor telescoop gemaakt heeft om naar de ruimte te kijken. \n\n Zijn telescoop gaf geen helderbeeld weer, maar toch heeft Galilei verschillende ontdekkingen kunnen doen met zijn telescoop. "
+
+<InfoJupiter>:
+    canvas.before:
+        Color:
+            rgba: (	21/255,21/255,21/255,1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+    BoxLayout:
+        oreintation: 'vertical'
+        size: root.size
+        padding: [50, 0, 50, 100]
+
+        BoxLayout:
+            canvas:
+                Color:
+                    rgb: 1, 1, 1
+                Ellipse:
+                    size: (self.width * 0.8) , (self.width * 0.8)
+                    source: 'images/jupiter_moons.jpg'
+                    pos: [self.center_x - (self.width * 0.8)/2, self.center_y - (self.width * 0.8)/2]
+                    angle_start: 0
+                    angle_end: 360
+
+        Label:
+            text_size: self.width, None
+            padding_x: 50
+            font_size: 25
+            text: "Galileo Galilei gebruikte zijn nieuwe telescoop om in de ruimte te kijken in 1810. Hij zag 3 heldere lichten rond Jupiter. Eerst dacht hij dat dit sterren waren. Maar deze “sterren” bewogen een verkeerde kant op, ze veranderde hun positie. Galileo zag zelfs nog een 4de “ster”. Na een tijdje dacht Galileo dat het geen sterren waren, maar objecten dat in een baan rond Jupiter draaien. Later kregen deze manen de namen: Io, Europa, Ganymede en Callisto. De grootste manen van Jupiter. "
