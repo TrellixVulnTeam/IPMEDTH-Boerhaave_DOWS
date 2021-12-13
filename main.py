@@ -163,7 +163,7 @@ class MyLayout(Widget):
                 #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
                 elif numberReader == 0:
                     if "mn" in message:
-                        self.ids.info_scherm.clear_widgets()
+                    #    self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
@@ -171,21 +171,21 @@ class MyLayout(Widget):
                 elif numberReader == 1:
                     if "sn" in message:
                         print("in")
-                        self.ids.info_scherm.clear_widgets()
+                    #    self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 2:
                     if "ts" in message:
-                        self.ids.info_scherm.clear_widgets()
+                    #    self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 3:
                     if "jm" in message:
-                        self.ids.info_scherm.clear_widgets()
+                    #    self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
@@ -197,19 +197,24 @@ class MyLayout(Widget):
 
     #als een voorwerp terug gezet wordt, check of er nog één voorwerp vast wordt gehouden, zoja, geef info weer
     def terugzettenErrorCheck(self):
-        self.popup.dismiss()
-        print("check")
         if voorwerpPlaatsen.count(0) < 2:
+            self.popup.dismiss()
             #loopt door de voorwerpen array heen en laat de informatie zien van één voorwerp dat opgetilt is
             for nfcreader in range(len(voorwerpPlaatsen)):
                 if voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 0:
+                    self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoMoon())
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 1:
+                    self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoSaturnMoon())
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 2:
+                    self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoTelescoop())
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 3:
+                    self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoJupiter())
+        else:
+            self.checkErr()
 
 
 
