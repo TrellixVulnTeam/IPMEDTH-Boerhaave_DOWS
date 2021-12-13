@@ -19,7 +19,8 @@ Builder.load_file('BasisSchermLayout.kv')
 Builder.load_file('info.kv')
 Builder.load_file('error.kv')
 
-voorwerpPlaatsen = [1,1,1,1,1,1,1,1]
+voorwerpPlaatsen = [1,1,1,1,1,1]
+voorwerpNamen = ["Maan Kraters", "Maan Saturnus", "Telescoop", "Manen Jupiter", "Sun-centered", "Ringen Saturnus"]
 
 class RedCircle(Widget):
     pass
@@ -41,6 +42,7 @@ class InfoMoon(Widget):
     pass
 class Instruction(Widget):
     pass
+
 
 
 class MyLayout(Widget):
@@ -89,17 +91,12 @@ class MyLayout(Widget):
                 App.get_running_app().root_window.children[0].dismiss()
             #maakt de layout van de pop
             popupLayout = ErrorPopUp()
-            layout = GridLayout(cols= 4, size_hint=(0.6, 0.7))
+            layout = GridLayout(cols= 3, size_hint=(0.6, 0.7))
             #voegt de achtergrond toe aan de popup
             with layout.canvas.before:
                 Color(0, 1,  0, 0.25)
                 Rectangle(size=(layout.size))
-            #loopt door alle voorwerpen heen. Als een vorwerp is opgetild rood cirkel anders groen
-            for rows in range(len(voorwerpPlaatsen)):
-                if voorwerpPlaatsen[rows] == 0:
-                    popupLayout.tafel.add_widget(RedCircle())
-                else:
-                    popupLayout.tafel.add_widget(GreenCircle())
+
 
             #self.popup = ModalView(size_hint=(None, None))
             with popupLayout.backgrounderror.canvas.before:
@@ -107,6 +104,21 @@ class MyLayout(Widget):
                 Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
             popupLayout.backgrounderror.size = self.size[0] / 2, self.size[1] / 2
             popupLayout.backgrounderror.pos = self.center_x / 2, self.center_y / 2
+            popupLayout.ids.tafel.padding = [(self.size[0] / 13),0,0,0]
+
+            #loopt door alle voorwerpen heen. Als een vorwerp is opgetild rood cirkel anders groen
+            for rows in range(len(voorwerpPlaatsen)):
+                if voorwerpPlaatsen[rows] == 0:
+                    red = RedCircle()
+                    red.ids.circle_box.size = (self.size[0] / 2) / 3, self.size[1] / 2
+                    red.ids.circle_title.text = voorwerpNamen[rows]
+                    popupLayout.ids.tafel.add_widget(red)
+                else:
+                    green = GreenCircle()
+                    green.ids.circle_box.size = (self.size[0] / 2) / 3, self.size[1] / 2
+                    green.ids.circle_title.text = voorwerpNamen[rows]
+                    popupLayout.ids.tafel.add_widget(green)
+
             self.popup.add_widget(popupLayout)
             self.popup.open()
 
