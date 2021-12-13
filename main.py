@@ -48,6 +48,7 @@ class MyLayout(Widget):
         super(MyLayout, self).__init__(**kwargs)
         refresh_time = 0.5
         Clock.schedule_interval(self.timer, refresh_time)
+        self.popup = ModalView(size_hint=(None, None))
 
     def press_it(self):
         current = self.ids.my_progress_bar.value
@@ -83,6 +84,9 @@ class MyLayout(Widget):
     #checkt of er een error is, als er meer dan 2 voorwerpen zijn opgetild
     def checkErr(self):
         if voorwerpPlaatsen.count(0) > 1:
+            #checkt of een popup momenteel open is, zo ja, doet het dicht
+            if isinstance(App.get_running_app().root_window.children[0], Popup):
+                App.get_running_app().root_window.children[0].dismiss()
             #maakt de layout van de pop
             popupLayout = ErrorPopUp()
             layout = GridLayout(cols= 4, size_hint=(0.6, 0.7))
@@ -97,7 +101,7 @@ class MyLayout(Widget):
                 else:
                     popupLayout.tafel.add_widget(GreenCircle())
 
-            self.popup = ModalView(size_hint=(None, None))
+            #self.popup = ModalView(size_hint=(None, None))
             with popupLayout.backgrounderror.canvas.before:
                 Color(0.1,0.1,0.1, 1)
                 Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
@@ -194,6 +198,7 @@ class MyLayout(Widget):
     #als een voorwerp terug gezet wordt, check of er nog één voorwerp vast wordt gehouden, zoja, geef info weer
     def terugzettenErrorCheck(self):
         self.popup.dismiss()
+        print("check")
         if voorwerpPlaatsen.count(0) < 2:
             #loopt door de voorwerpen array heen en laat de informatie zien van één voorwerp dat opgetilt is
             for nfcreader in range(len(voorwerpPlaatsen)):
