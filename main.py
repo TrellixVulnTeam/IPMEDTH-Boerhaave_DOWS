@@ -19,7 +19,8 @@ Builder.load_file('BasisSchermLayout.kv')
 Builder.load_file('info.kv')
 Builder.load_file('error.kv')
 
-voorwerpPlaatsen = [1,1,1,1,1,1,1,1]
+voorwerpPlaatsen = [1,1,1,1,1,1]
+voorwerpNamen = ["Maan Kraters", "Maan Saturnus", "Telescoop", "Manen Jupiter", "Sun-centered", "Ringen Saturnus"]
 
 class RedCircle(Widget):
     pass
@@ -43,11 +44,13 @@ class Instruction(Widget):
     pass
 
 
+
 class MyLayout(Widget):
     def __init__(self, **kwargs):
         super(MyLayout, self).__init__(**kwargs)
         refresh_time = 0.5
         Clock.schedule_interval(self.timer, refresh_time)
+        self.popup = ModalView(size_hint=(None, None))
 
     def press_it(self):
         current = self.ids.my_progress_bar.value
@@ -83,26 +86,39 @@ class MyLayout(Widget):
     #checkt of er een error is, als er meer dan 2 voorwerpen zijn opgetild
     def checkErr(self):
         if voorwerpPlaatsen.count(0) > 1:
+            #checkt of een popup momenteel open is, zo ja, doet het dicht
+            if isinstance(App.get_running_app().root_window.children[0], Popup):
+                App.get_running_app().root_window.children[0].dismiss()
             #maakt de layout van de pop
             popupLayout = ErrorPopUp()
-            layout = GridLayout(cols= 4, size_hint=(0.6, 0.7))
+            layout = GridLayout(cols= 3, size_hint=(0.6, 0.7))
             #voegt de achtergrond toe aan de popup
             with layout.canvas.before:
                 Color(0, 1,  0, 0.25)
                 Rectangle(size=(layout.size))
-            #loopt door alle voorwerpen heen. Als een vorwerp is opgetild rood cirkel anders groen
-            for rows in range(len(voorwerpPlaatsen)):
-                if voorwerpPlaatsen[rows] == 0:
-                    popupLayout.tafel.add_widget(RedCircle())
-                else:
-                    popupLayout.tafel.add_widget(GreenCircle())
 
-            self.popup = ModalView(size_hint=(None, None))
+
+            #self.popup = ModalView(size_hint=(None, None))
             with popupLayout.backgrounderror.canvas.before:
                 Color(0.1,0.1,0.1, 1)
                 Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
             popupLayout.backgrounderror.size = self.size[0] / 2, self.size[1] / 2
             popupLayout.backgrounderror.pos = self.center_x / 2, self.center_y / 2
+            popupLayout.ids.tafel.padding = [(self.size[0] / 13),0,0,0]
+
+            #loopt door alle voorwerpen heen. Als een vorwerp is opgetild rood cirkel anders groen
+            for rows in range(len(voorwerpPlaatsen)):
+                if voorwerpPlaatsen[rows] == 0:
+                    red = RedCircle()
+                    red.ids.circle_box.size = (self.size[0] / 2) / 3, self.size[1] / 2
+                    red.ids.circle_title.text = voorwerpNamen[rows]
+                    popupLayout.ids.tafel.add_widget(red)
+                else:
+                    green = GreenCircle()
+                    green.ids.circle_box.size = (self.size[0] / 2) / 3, self.size[1] / 2
+                    green.ids.circle_title.text = voorwerpNamen[rows]
+                    popupLayout.ids.tafel.add_widget(green)
+
             self.popup.add_widget(popupLayout)
             self.popup.open()
 
@@ -159,7 +175,7 @@ class MyLayout(Widget):
                 #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
                 elif numberReader == 0:
                     if "mn" in message:
-                        self.ids.info_scherm.clear_widgets()
+                    #    self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
@@ -167,21 +183,21 @@ class MyLayout(Widget):
                 elif numberReader == 1:
                     if "sn" in message:
                         print("in")
-                        self.ids.info_scherm.clear_widgets()
+                    #    self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 2:
                     if "ts" in message:
-                        self.ids.info_scherm.clear_widgets()
+                    #    self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 3:
                     if "jm" in message:
-                        self.ids.info_scherm.clear_widgets()
+                    #    self.ids.info_scherm.clear_widgets()
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
@@ -193,18 +209,24 @@ class MyLayout(Widget):
 
     #als een voorwerp terug gezet wordt, check of er nog één voorwerp vast wordt gehouden, zoja, geef info weer
     def terugzettenErrorCheck(self):
-        self.popup.dismiss()
         if voorwerpPlaatsen.count(0) < 2:
+            self.popup.dismiss()
             #loopt door de voorwerpen array heen en laat de informatie zien van één voorwerp dat opgetilt is
             for nfcreader in range(len(voorwerpPlaatsen)):
                 if voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 0:
+                    self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoMoon())
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 1:
+                    self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoSaturnMoon())
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 2:
+                    self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoTelescoop())
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 3:
+                    self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoJupiter())
+        else:
+            self.checkErr()
 
 
 

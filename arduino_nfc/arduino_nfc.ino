@@ -2,15 +2,17 @@
 #include <MFRC522.h>
 
 #define SS_PIN 10
-#define SS_2_PIN 5
-#define SS_3_PIN 8
-#define SS_4_PIN 7
+#define SS_2_PIN 8
+#define SS_3_PIN 7
+#define SS_4_PIN 6
+#define SS_5_PIN 5
+#define SS_6_PIN 4
 #define RST_PIN 9
 #define SS_ANSWER_PIN 3
 
-#define NR_OF_READERS   5
+#define NR_OF_READERS 7
 //SS_ANSWER_PIN als laatste
-byte ssPins[] = {SS_PIN, SS_2_PIN, SS_3_PIN, SS_4_PIN, SS_ANSWER_PIN};
+byte ssPins[] = {SS_PIN, SS_2_PIN, SS_3_PIN, SS_4_PIN, SS_5_PIN,SS_6_PIN, SS_ANSWER_PIN};
 MFRC522 mfrc522[NR_OF_READERS];
 bool statusReaders[NR_OF_READERS];
 
@@ -37,7 +39,7 @@ void setup() {
   }
 
   Serial.println("Tap RFID/NFC Tag on reader");
-  pinMode(pushButton, INPUT);
+ // pinMode(pushButton, INPUT);
 }
 
 void check_code(String code, uint8_t numberReader){
@@ -106,7 +108,7 @@ void resetScan(){
 
 void loop() {
   //checkt of de "reset" knop is in gedruk
-  if(digitalRead(pushButton)){
+ /* if(digitalRead(pushButton)){
       if(digitalRead(pushButton) && !(buttonPressed)){
       buttonPressed = true;
       resetScan();
@@ -115,9 +117,9 @@ void loop() {
   //als de knop los gelaten wordt, return naar niet ingedrukte state
   else if( !(digitalRead(pushButton)) && buttonPressed){
       buttonPressed = false;
-  }
+  }*/
   //leest de veranderingen van de NFCreaders
-  else{
+  //else{
     for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
       if(mfrc522[reader].PICC_IsNewCardPresent() ){
         if(mfrc522[reader].PICC_ReadCardSerial()){
@@ -150,6 +152,6 @@ void loop() {
         
       }
     }
-  }
+  //}
   
 }

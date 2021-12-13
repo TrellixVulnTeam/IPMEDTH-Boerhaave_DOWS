@@ -1,27 +1,54 @@
 
 <RedCircle>:
-    BoxLayout:
-        canvas:
-            Color:
-                rgb: 1, 0.1, 0.1, 1
-            Ellipse:
-                size: (self.width * 0.8) , (self.width * 0.8)
-                pos: root.x, root.y
-                #pos: [self.center_x - (self.width * 0.8)/2, self.center_y - (self.width * 0.8)/2]
-                angle_start: 0
-                angle_end: 360
+    GridLayout:
+        cols: 1
+        spacing: [50, 50]
+        id: red_circle
+        size_hint_y: None
+        height: self.minimum_height
+        pos: root.x, root.y
+        BoxLayout:
+            id: circle_box
+            canvas:
+                Color:
+                    rgb: 1, 0.1, 0.1, 1
+                Ellipse:
+                    group: 'a'
+                    #size: (self.width) , (self.width)
+                    size: (self.width * 0.8) , (self.width * 0.8)
+                    pos: root.x + self.width * 0.1, root.y + 30
+                    angle_start: 0
+                    angle_end: 360
+        Label:
+            id: circle_title
+            size_hint_y:0.2
+            font_size: 20
+            text: "test"
 
 <GreenCircle>:
-    BoxLayout:
-        canvas:
-            Color:
-                rgb: 0.15, 1, 0, 1
-            Ellipse:
-                size: (self.width * 0.8) , (self.width * 0.8)
-                pos: root.x, root.y
-                #pos: self.pos
-                angle_start: 0
-                angle_end: 360
+    GridLayout:
+        cols: 1
+        spacing: [50, 50]
+        id: red_circle
+        size_hint_y: None
+        height: self.minimum_height
+        pos: root.x, root.y
+        BoxLayout:
+            id: circle_box
+            canvas:
+                Color:
+                    rgb: 0.15, 1, 0, 1
+                Ellipse:
+                    group: 'a'
+                    size: (self.width * 0.8) , (self.width * 0.8)
+                    pos: root.x + self.width * 0.1, root.y + 30
+                    angle_start: 0
+                    angle_end: 360
+        Label:
+            id: circle_title
+            size_hint_y:0.2
+            font_size: 20
+            text: "test"
 
 <BackDrop>:
     canvas.before:
@@ -35,18 +62,20 @@
 
 
 <ErrorPopUp>:
-    tafel: tafel
     backgrounderror: backgrounderror
     AnchorLayout:
         id: backgrounderror
         anchor_x: 'center'
         anchor_y: 'center'
+        pos_hint: {'x': 0, 'top': 1}
         GridLayout:
             cols: 1
             GridLayout:
+                #col_force_default: True
+                #padding: [50, 0, 0, 0]
                 id: tafel
-                cols: 4
-                size_hint_x: 0.4
+                cols: 3
+
             Label:
                 text: "Deze voorwerpen staan niet op de juiste plek"
                 size_hint_y: 0.5
