@@ -15,6 +15,16 @@ import serial
 import time
 import random
 
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
+
+led_mn = 26
+led_sn = 19
+led_ts = 13
+GPIO.setup(led_mn, GPIO.OUT)
+GPIO.setup(led_sn, GPIO.OUT)
+GPIO.setup(led_ts, GPIO.OUT)
+
 Builder.load_file('BasisSchermLayout.kv')
 Builder.load_file('info.kv')
 Builder.load_file('error.kv')
@@ -130,10 +140,19 @@ class MyLayout(Widget):
         if ser.in_waiting > 2:
             line = ser.readline().decode('utf-8').rstrip()
             self.arduinoCheck(line)
+    
+    def lichtAanzetten(self, nummerNFCreader):
+        if nummerNFCreader == 0:
+            GPIO.output(led_mn, GPIO.HIGH)
+        elif nummerNFCreader == 1:
+            GPIO.output(led_sn, GPIO.HIGH)
+        elif nummerNFCreader == 2:
+            GPIO.output(led_ts, GPIO.HIGH)
 
     #als een voorwerp wordt opgepakt, checkt welk voorwerp het is en of er teveel zijn opgetild
     def optillenVoorwerpCheck(self, nummerNFCreader):
         voorwerpPlaatsen[nummerNFCreader] = 0
+        self.lichtAanzetten(nummerNFCreader)
         #als er meer dan 2 voorwerpen zijn opgetilt, ga naar error scherm
         if voorwerpPlaatsen.count(0) > 1:
             self.checkErr()
@@ -179,6 +198,7 @@ class MyLayout(Widget):
                 elif numberReader == 0:
                     if "mn" in message:
                     #    self.ids.info_scherm.clear_widgets()
+                        GPIO.output(led_mn, GPIO.LOW)
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
@@ -187,6 +207,7 @@ class MyLayout(Widget):
                     if "sn" in message:
                         print("in")
                     #    self.ids.info_scherm.clear_widgets()
+                        GPIO.output(led_sn, GPIO.LOW)
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
@@ -194,6 +215,7 @@ class MyLayout(Widget):
                 elif numberReader == 2:
                     if "ts" in message:
                     #    self.ids.info_scherm.clear_widgets()
+                        GPIO.output(led_ts, GPIO.LOW)
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
@@ -251,6 +273,7 @@ if __name__ == '__main__':
   Config.set('graphics', 'window_state', 'maximized')
   Config.write()
   #setup van de serial poort waar de pi naar luistert
-  ser = serial.Serial('COM4', 9600, timeout=1)
+  #ser = serial.Serial('COM4', 9600, timeout=1)
+  ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
   ser.reset_input_buffer()
   MyApp().run()
