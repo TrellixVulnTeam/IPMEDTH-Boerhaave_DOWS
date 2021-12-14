@@ -45,6 +45,7 @@ class Instruction(Widget):
 
 
 
+
 class MyLayout(Widget):
     def __init__(self, **kwargs):
         super(MyLayout, self).__init__(**kwargs)
@@ -109,11 +110,13 @@ class MyLayout(Widget):
             #loopt door alle voorwerpen heen. Als een vorwerp is opgetild rood cirkel anders groen
             for rows in range(len(voorwerpPlaatsen)):
                 if voorwerpPlaatsen[rows] == 0:
+                    #rode cirkel maken met juiste afmeting & naam
                     red = RedCircle()
                     red.ids.circle_box.size = (self.size[0] / 2) / 3, self.size[1] / 2
                     red.ids.circle_title.text = voorwerpNamen[rows]
                     popupLayout.ids.tafel.add_widget(red)
                 else:
+                    #groene cirkel maken met juiste afmeting & naam
                     green = GreenCircle()
                     green.ids.circle_box.size = (self.size[0] / 2) / 3, self.size[1] / 2
                     green.ids.circle_title.text = voorwerpNamen[rows]
@@ -209,22 +212,29 @@ class MyLayout(Widget):
 
     #als een voorwerp terug gezet wordt, check of er nog één voorwerp vast wordt gehouden, zoja, geef info weer
     def terugzettenErrorCheck(self):
-        if voorwerpPlaatsen.count(0) < 2:
+        if voorwerpPlaatsen.count(0) == 1:
             self.popup.dismiss()
+            self.ids.info_scherm.clear_widgets()
             #loopt door de voorwerpen array heen en laat de informatie zien van één voorwerp dat opgetilt is
             for nfcreader in range(len(voorwerpPlaatsen)):
                 if voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 0:
-                    self.ids.info_scherm.clear_widgets()
+                    #self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoMoon())
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 1:
-                    self.ids.info_scherm.clear_widgets()
+                    #self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoSaturnMoon())
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 2:
-                    self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoTelescoop())
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 3:
-                    self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoJupiter())
+        elif voorwerpPlaatsen.count(0) == 0:
+            self.popup.dismiss()
+            self.ids.info_scherm.clear_widgets()
+            # Instructie widget maken en de afmetingen meegeven
+            instructions = Instruction()
+            instructions.ids.intro.size = (self.size[0] * 0.9, self.height * 0.5)
+            instructions.ids.intro.padding = (self.size[0] * 0.1, 50, 0, 0)
+            self.ids.info_scherm.add_widget(instructions)
         else:
             self.checkErr()
 
