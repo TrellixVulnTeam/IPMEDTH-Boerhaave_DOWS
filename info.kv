@@ -28,13 +28,14 @@
 <InfoSaturnMoon>:
     canvas.before:
         Color:
-            rgba: (	0.1, 0.1, 0.1,1)
+            rgba: (	21/255,21/255,21/255,1)
         Rectangle:
             pos: self.pos
             size: self.size
-    GridLayout:
-        cols: 2
+    BoxLayout:
+        oreintation: 'vertical'
         size: root.size
+        padding: [50, 0, 50, 100]
 
         BoxLayout:
             canvas:
@@ -50,7 +51,7 @@
         Label:
             text_size: self.width, None
             padding_x: 50
-            #size: root.width, root.height
+            font_size: 25
             text: "In 1655 ontdekte Christiaan Huygens een maan rond Saturnus, Titan.    Huygens had met zijn broer een nieuwe telescoop gemaakt, waardoor ze beter verder in het zonnestelsel konden kijken, waardoor ze Titan ontdekt. Ze noemde te maan: 'Saturni Luna' (Saturnusmaan).Dit was de zesde maan dat ontdekt werd in het zonnestelsel. "
 
 <InfoMoon>:
