@@ -48,9 +48,10 @@ class Instruction(Widget):
 class MyLayout(Widget):
     def __init__(self, **kwargs):
         super(MyLayout, self).__init__(**kwargs)
-        refresh_time = 0.5
-        Clock.schedule_interval(self.timer, refresh_time)
-        self.popup = ModalView(size_hint=(None, None))
+        # refresh_time = 0.5
+        # Clock.schedule_interval(self.timer, refresh_time)
+        # self.popup = ModalView(size_hint=(None, None))
+        questions = self.tienrandom()
 
     def press_it(self):
         current = self.ids.my_progress_bar.value
@@ -65,22 +66,22 @@ class MyLayout(Widget):
         current += .20
         current_question += 1
 
-        self.ids.info_scherm.clear_widgets()
-        self.ids.info_scherm.add_widget(InfoMoon())
-
-        self.question_choser()
+        # self.ids.info_scherm.clear_widgets()
+        # self.ids.info_scherm.add_widget(InfoMoon())
+        
 
         self.ids.my_progress_bar.value = current
         self.ids.my_label.value = current_question
         self.ids.my_label.text = f'Vraag {self.ids.my_label.value}'
 
-    def question_choser(self):
-        questions = ['nieuwe_vraag1', 'nieuwe_vraag2', 'nieuwe_vraag3', 'nieuwe_vraag4']
-
-        while len(questions) > 0:
-          index = random.choice(questions)
-          questions.remove(index)
-          print(questions)
+    def tienrandom(self):
+      questions = ['vraag1', 'vraag2', 'vraag3', 'vraag4', 'vraag5', 'vraag6', 'vraag7', 'vraag8', 'vraag9', 'vraag10']
+      randomvragen = []
+      randomlist = random.sample(range(0, 10), 10)
+      for item in randomlist:
+        randomvragen.append(questions[item])
+    
+      return randomvragen
 
 
     #checkt of er een error is, als er meer dan 2 voorwerpen zijn opgetild
@@ -123,10 +124,10 @@ class MyLayout(Widget):
             self.popup.open()
 
     #timer function die checkt of er een bericht van de arduino binnen is
-    def timer(self, dt):
-        if ser.in_waiting > 2:
-            line = ser.readline().decode('utf-8').rstrip()
-            self.arduinoCheck(line)
+    # def timer(self, dt):
+    #     if ser.in_waiting > 2:
+    #         line = ser.readline().decode('utf-8').rstrip()
+    #         self.arduinoCheck(line)
 
     #als een voorwerp wordt opgepakt, checkt welk voorwerp het is en of er teveel zijn opgetild
     def optillenVoorwerpCheck(self, nummerNFCreader):
@@ -241,6 +242,6 @@ if __name__ == '__main__':
   Config.set('graphics', 'window_state', 'maximized')
   Config.write()
   #setup van de serial poort waar de pi naar luistert
-  ser = serial.Serial('COM4', 9600, timeout=1)
-  ser.reset_input_buffer()
+  # ser = serial.Serial('COM4', 9600, timeout=1)
+  # ser.reset_input_buffer()
   MyApp().run()
