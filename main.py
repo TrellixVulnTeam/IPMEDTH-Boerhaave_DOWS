@@ -233,6 +233,14 @@ class MyLayout(Widget):
             # Instructie widget maken en de afmetingen meegeven
             instructions = Instruction()
             instructions.ids.intro.size = (self.size[0] * 0.9, self.height * 0.5)
+            print(self.size)
+            if self.size[0] > 1700:
+                instructions.ids.eerst_label.font_size = 60
+                instructions.ids.tweede_label.font_size = 55
+            else:
+                instructions.ids.eerst_label.font_size = 40
+                instructions.ids.tweede_label.font_size = 35
+
             instructions.ids.intro.padding = (self.size[0] * 0.1, 50, 0, 0)
             self.ids.info_scherm.add_widget(instructions)
         else:
@@ -251,6 +259,6 @@ if __name__ == '__main__':
   Config.set('graphics', 'window_state', 'maximized')
   Config.write()
   #setup van de serial poort waar de pi naar luistert
-  ser = serial.Serial('COM4', 9600, timeout=1)
+  ser = serial.Serial('COM7', 9600, timeout=1)
   ser.reset_input_buffer()
   MyApp().run()
