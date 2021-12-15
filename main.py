@@ -22,6 +22,17 @@ Builder.load_file('error.kv')
 voorwerpPlaatsen = [1,1,1,1,1,1]
 voorwerpNamen = ["Maan Kraters", "Maan Saturnus", "Telescoop", "Manen Jupiter", "Sun-centered", "Ringen Saturnus"]
 
+def tienrandom():
+  questions = ['vraag1', 'vraag2', 'vraag3', 'vraag4', 'vraag5', 'vraag6', 'vraag7', 'vraag8', 'vraag9', 'vraag10']
+  randomvragen = []
+  randomlist = random.sample(range(0, len(questions)), len(questions))
+  for item in randomlist:
+    randomvragen.append(questions[item])
+
+  return randomvragen
+
+vragen = tienrandom()
+
 class RedCircle(Widget):
     pass
 class GreenCircle(Widget):
@@ -51,7 +62,6 @@ class MyLayout(Widget):
         # refresh_time = 0.5
         # Clock.schedule_interval(self.timer, refresh_time)
         # self.popup = ModalView(size_hint=(None, None))
-        questions = self.tienrandom()
 
     def press_it(self):
         current = self.ids.my_progress_bar.value
@@ -69,20 +79,11 @@ class MyLayout(Widget):
         # self.ids.info_scherm.clear_widgets()
         # self.ids.info_scherm.add_widget(InfoMoon())
         
+        self.ids.my_label_question.text = vragen.pop(0)
 
         self.ids.my_progress_bar.value = current
         self.ids.my_label.value = current_question
-        self.ids.my_label.text = f'Vraag {self.ids.my_label.value}'
-
-    def tienrandom(self):
-      questions = ['vraag1', 'vraag2', 'vraag3', 'vraag4', 'vraag5', 'vraag6', 'vraag7', 'vraag8', 'vraag9', 'vraag10']
-      randomvragen = []
-      randomlist = random.sample(range(0, 10), 10)
-      for item in randomlist:
-        randomvragen.append(questions[item])
-    
-      return randomvragen
-
+        self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
 
     #checkt of er een error is, als er meer dan 2 voorwerpen zijn opgetild
     def checkErr(self):
