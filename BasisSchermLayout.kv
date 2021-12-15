@@ -26,10 +26,10 @@
         orientation: 'vertical'
 
         size_hint_y: None
-        height: 300
+        height: dp(300)
 
-        padding: 100
-        spacing: 50
+        padding: dp(100)
+        spacing: dp(50)
 
         canvas:
           Color:
@@ -63,14 +63,14 @@
         Label:
           id: my_label
           text: 'Vraag 1'
-          font_size: 32
+          font_size: dp(32)
           value: 1
 
         Label:
           id: my_label_question
           text: 'Wie heeft een telescoop lens uit gevonden?'
           text_size: self.width, None
-          font_size: 40
+          font_size: dp(40)
           valign: 'middle'
           halign: 'center'
           value: 1
@@ -78,7 +78,7 @@
       BoxLayout:
         orientation: 'horizontal'
         size_hint_y: None
-        height: 50
+        height: dp(50)
 
         canvas:
           Color:
@@ -92,7 +92,7 @@
       BoxLayout:
         id: info_scherm
         orientation: 'vertical'
-        padding: [100, 0, 100, 0]
+        padding: [dp(100), 0, dp(100), 0]
 
         canvas:
           Color:
@@ -103,7 +103,7 @@
 
         AnchorLayout:
           size_hint_y: None
-          height: 200
+          height: dp(200)
           pos_hint: {'x': 0, 'top': 1}
           anchor_x: 'center'
           anchor_y: 'bottom'
@@ -117,9 +117,9 @@
 
           Label:
             text: 'Vind het juiste object bij de vraag'
-            font_size: 54
+            font_size: dp(54)
             size_hint_y: None
-            height: 100
+            height: dp(100)
 
         AnchorLayout:
           pos_hint: {'x': 0, 'top': 1}
@@ -138,16 +138,16 @@
             halign: 'center'
             valign: 'middle'
             text: 'Als u een object op pakt krijgt u extra informatie op het scherm'
-            font_size: 96
+            font_size: dp(96)
             size_hint_y: None
-            height: 100
+            height: dp(100)
 
         Button:
           text: 'Press Me!'
           size_hint_x: None
-          width: 700
+          width: dp(700)
 
           size_hint_y: None
-          height: 100
+          height: dp(100)
 
           on_press: root.press_it()
