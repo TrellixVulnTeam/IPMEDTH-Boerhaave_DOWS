@@ -235,8 +235,8 @@ class MyLayout(Widget):
             instructions.ids.intro.size = (self.size[0] * 0.9, self.height * 0.5)
             print(self.size)
             if self.size[0] > 1700:
-                instructions.ids.eerst_label.font_size = 60
-                instructions.ids.tweede_label.font_size = 55
+                instructions.ids.eerst_label.font_size = 70
+                instructions.ids.tweede_label.font_size = 65
             else:
                 instructions.ids.eerst_label.font_size = 40
                 instructions.ids.tweede_label.font_size = 35
