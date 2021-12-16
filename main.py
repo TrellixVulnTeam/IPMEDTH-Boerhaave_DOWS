@@ -21,26 +21,27 @@ Builder.load_file('error.kv')
 
 voorwerpPlaatsen = [1,1,1,1,1,1]
 voorwerpNamen = ["Maan Kraters", "Maan Saturnus", "Telescoop", "Manen Jupiter", "Sun-centered", "Ringen Saturnus"]
-
+#questions = [['vraag1', 'mn'],
+ # ['vraag2', 'mn'],
+ # ['vraag3', 'sn'],
+ # ['vraag4', 'sn'],
+ # ['vraag5', 'ts'],
+  #['vraag6', 'ts'],
+  #['vraag7', 'jm'],
+ # ['vraag8', 'jm'],
+ # ['vraag9', 'sc'],
+ # ['vraag10', 'sc'],
+ # ['vraag11', 'rs'],
+ # ['vraag12', 'rs']]
+questions = ['vraag1','vraag2','vraag3','vraag4','vraag5','vraag6','vraag7','vraag8','vraag9','vraag10','vraag11','vraag12']
+#antwoordeVragen = ['mn','mn','sn','sn','ts','ts','jm','jm','sc','sc','rs','rs']
+antwoordeVragen = ['ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts']
 def tienrandom():
-  questions = [['vraag1', 'mn'],
-  ['vraag2', 'mn'],
-  ['vraag3', 'sn'],
-  ['vraag4', 'sn'],
-  ['vraag5', 'ts'],
-  ['vraag6', 'ts'],
-  ['vraag7', 'jm'],
-  ['vraag8', 'jm'],
-  ['vraag9', 'sc'],
-  ['vraag10', 'sc'],
-  ['vraag11', 'rs'],
-  ['vraag12', 'rs']]
-
   randomvragen = []
   maximum_questions = 5
   randomlist = random.sample(range(0, len(questions)), maximum_questions)
   for item in randomlist:
-    randomvragen.append(questions[item][0])
+    randomvragen.append(questions[item])
   return randomvragen
 
 
@@ -73,9 +74,8 @@ class MyLayout(Widget):
         super(MyLayout, self).__init__(**kwargs)
         #init vragen
         self.vragen = tienrandom()
-        print(self.vragen[0])
-        print(self.ids.my_label.value)
         self.ids.my_label_question.text = self.vragen[0]
+        #set timer voor arduino
         refresh_time = 0.5
         Clock.schedule_interval(self.timer, refresh_time)
         self.popup = ModalView(size_hint=(None, None))
@@ -92,15 +92,36 @@ class MyLayout(Widget):
 
         current += .20
         current_question += 1
-
-        # self.ids.info_scherm.clear_widgets()
-        # self.ids.info_scherm.add_widget(InfoMoon())
+        #delete de voorste vraag en pakt set de label voor nieuwe vraag
         self.vragen.pop(0)
         self.ids.my_label_question.text = self.vragen[0]
 
         self.ids.my_progress_bar.value = current
         self.ids.my_label.value = current_question
         self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
+
+    def next_question(self):
+        if len(self.vragen) > 1:
+            current = self.ids.my_progress_bar.value
+            current_question = self.ids.my_label.value
+
+            if current == 1:
+              current = 0
+
+            if current_question == 5:
+              current_question = 0
+
+            current += .20
+            current_question += 1
+            #delete de voorste vraag en pakt set de label voor nieuwe vraag
+            self.vragen.pop(0)
+            self.ids.my_label_question.text = self.vragen[0]
+
+            self.ids.my_progress_bar.value = current
+            self.ids.my_label.value = current_question
+            self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
+        else:
+            print("out")
 
     #checkt of er een error is, als er meer dan 2 voorwerpen zijn opgetild
     def checkErr(self):
@@ -168,20 +189,19 @@ class MyLayout(Widget):
     #functie die checkt wat voor antwoord bericht er van de arduino wordt verstuurd
     def antwoordBerichtChecken(self, message):
         print(message)
-        print(self.vragen[0])
         #a_none
         if "none" in message:
             #TODO Antwoord weghalen van veld
             print("voorwerp opgetilt")
-        elif "mn" in message:
-            #TODO ALLE ANTWOORDEN TOEVOEGEN
-            print("antwoord")
-        elif "sn" in message:
-            #TODO ALLE ANTWOORDEN TOEVOEGEN
-            print("antwoord")
-        elif "ts" in message:
-            #TODO ALLE ANTWOORDEN TOEVOEGEN
-            print("antwoord")
+        else:
+            print(self.vragen[0])
+            vraag_index = questions.index(self.vragen[0])
+            if antwoordeVragen[vraag_index] in message:
+                self.next_question()
+            else:
+                #TODO fout antwoord
+                print("TODO: fout")
+
 
 
     #checkt het bericht dat de machine krijgt van de Arduino
