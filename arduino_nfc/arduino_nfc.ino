@@ -121,6 +121,7 @@ void loop() {
   //leest de veranderingen van de NFCreaders
   //else{
     for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
+    
       if(mfrc522[reader].PICC_IsNewCardPresent() ){
         if(mfrc522[reader].PICC_ReadCardSerial()){
          // !! DIT IS GEEN REDUCANT CODE. HIERDOOR WERKT HET, LAAT DEZE REGEL STAAN !!!! 

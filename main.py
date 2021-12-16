@@ -23,15 +23,27 @@ voorwerpPlaatsen = [1,1,1,1,1,1]
 voorwerpNamen = ["Maan Kraters", "Maan Saturnus", "Telescoop", "Manen Jupiter", "Sun-centered", "Ringen Saturnus"]
 
 def tienrandom():
-  questions = ['vraag1', 'vraag2', 'vraag3', 'vraag4', 'vraag5', 'vraag6', 'vraag7', 'vraag8', 'vraag9', 'vraag10']
-  randomvragen = []
-  randomlist = random.sample(range(0, len(questions)), len(questions))
-  for item in randomlist:
-    randomvragen.append(questions[item])
+  questions = [['vraag1', 'mn'],
+  ['vraag2', 'mn'],
+  ['vraag3', 'sn'],
+  ['vraag4', 'sn'],
+  ['vraag5', 'ts'],
+  ['vraag6', 'ts'],
+  ['vraag7', 'jm'],
+  ['vraag8', 'jm'],
+  ['vraag9', 'sc'],
+  ['vraag10', 'sc'],
+  ['vraag11', 'rs'],
+  ['vraag12', 'rs']]
 
+  randomvragen = []
+  maximum_questions = 5
+  randomlist = random.sample(range(0, len(questions)), maximum_questions)
+  for item in randomlist:
+    randomvragen.append(questions[item][0])
   return randomvragen
 
-vragen = tienrandom()
+
 
 class RedCircle(Widget):
     pass
@@ -59,9 +71,14 @@ class Instruction(Widget):
 class MyLayout(Widget):
     def __init__(self, **kwargs):
         super(MyLayout, self).__init__(**kwargs)
-        # refresh_time = 0.5
-        # Clock.schedule_interval(self.timer, refresh_time)
-        # self.popup = ModalView(size_hint=(None, None))
+        #init vragen
+        self.vragen = tienrandom()
+        print(self.vragen[0])
+        print(self.ids.my_label.value)
+        self.ids.my_label_question.text = self.vragen[0]
+        refresh_time = 0.5
+        Clock.schedule_interval(self.timer, refresh_time)
+        self.popup = ModalView(size_hint=(None, None))
 
     def press_it(self):
         current = self.ids.my_progress_bar.value
@@ -78,8 +95,8 @@ class MyLayout(Widget):
 
         # self.ids.info_scherm.clear_widgets()
         # self.ids.info_scherm.add_widget(InfoMoon())
-        
-        self.ids.my_label_question.text = vragen.pop(0)
+        self.vragen.pop(0)
+        self.ids.my_label_question.text = self.vragen[0]
 
         self.ids.my_progress_bar.value = current
         self.ids.my_label.value = current_question
@@ -125,10 +142,10 @@ class MyLayout(Widget):
             self.popup.open()
 
     #timer function die checkt of er een bericht van de arduino binnen is
-    # def timer(self, dt):
-    #     if ser.in_waiting > 2:
-    #         line = ser.readline().decode('utf-8').rstrip()
-    #         self.arduinoCheck(line)
+    def timer(self, dt):
+        if ser.in_waiting > 2:
+            line = ser.readline().decode('utf-8').rstrip()
+            self.arduinoCheck(line)
 
     #als een voorwerp wordt opgepakt, checkt welk voorwerp het is en of er teveel zijn opgetild
     def optillenVoorwerpCheck(self, nummerNFCreader):
@@ -150,14 +167,22 @@ class MyLayout(Widget):
 
     #functie die checkt wat voor antwoord bericht er van de arduino wordt verstuurd
     def antwoordBerichtChecken(self, message):
+        print(message)
+        print(self.vragen[0])
         #a_none
         if "none" in message:
             #TODO Antwoord weghalen van veld
             print("voorwerp opgetilt")
-        #a_sn
+        elif "mn" in message:
+            #TODO ALLE ANTWOORDEN TOEVOEGEN
+            print("antwoord")
         elif "sn" in message:
             #TODO ALLE ANTWOORDEN TOEVOEGEN
             print("antwoord")
+        elif "ts" in message:
+            #TODO ALLE ANTWOORDEN TOEVOEGEN
+            print("antwoord")
+
 
     #checkt het bericht dat de machine krijgt van de Arduino
     def arduinoCheck(self, message):
@@ -243,6 +268,6 @@ if __name__ == '__main__':
   Config.set('graphics', 'window_state', 'maximized')
   Config.write()
   #setup van de serial poort waar de pi naar luistert
-  # ser = serial.Serial('COM4', 9600, timeout=1)
-  # ser.reset_input_buffer()
+  ser = serial.Serial('COM4', 9600, timeout=1)
+  ser.reset_input_buffer()
   MyApp().run()
