@@ -18,6 +18,7 @@ import random
 Builder.load_file('BasisSchermLayout.kv')
 Builder.load_file('info.kv')
 Builder.load_file('error.kv')
+Builder.load_file('victory.kv')
 
 voorwerpPlaatsen = [1,1,1,1,1,1]
 voorwerpNamen = ["Maan Kraters", "Maan Saturnus", "Telescoop", "Manen Jupiter", "Sun-centered", "Ringen Saturnus"]
@@ -36,15 +37,6 @@ voorwerpNamen = ["Maan Kraters", "Maan Saturnus", "Telescoop", "Manen Jupiter", 
 questions = ['vraag1','vraag2','vraag3','vraag4','vraag5','vraag6','vraag7','vraag8','vraag9','vraag10','vraag11','vraag12']
 #antwoordeVragen = ['mn','mn','sn','sn','ts','ts','jm','jm','sc','sc','rs','rs']
 antwoordeVragen = ['ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts']
-def tienrandom():
-  randomvragen = []
-  maximum_questions = 5
-  randomlist = random.sample(range(0, len(questions)), maximum_questions)
-  for item in randomlist:
-    randomvragen.append(questions[item])
-  return randomvragen
-
-
 
 class RedCircle(Widget):
     pass
@@ -66,6 +58,8 @@ class InfoMoon(Widget):
     pass
 class Instruction(Widget):
     pass
+class VictoryPopup(Widget):
+    pass
 
 
 
@@ -73,7 +67,7 @@ class MyLayout(Widget):
     def __init__(self, **kwargs):
         super(MyLayout, self).__init__(**kwargs)
         #init vragen
-        self.vragen = tienrandom()
+        self.vragen = self.tienrandom()
         self.ids.my_label_question.text = self.vragen[0]
         #set timer voor arduino
         refresh_time = 0.5
@@ -100,6 +94,24 @@ class MyLayout(Widget):
         self.ids.my_label.value = current_question
         self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
 
+    def tienrandom(self):
+      randomvragen = []
+      maximum_questions = 5
+      randomlist = random.sample(range(0, len(questions)), maximum_questions)
+      for item in randomlist:
+        randomvragen.append(questions[item])
+      return randomvragen
+
+
+    def create_Victory_Popup(self):
+        victoryPopup = VictoryPopup()
+        with victoryPopup.ids.victoryLayout.canvas.before:
+            Color(0.1,0.1,0.1, 1)
+            Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
+        victoryPopup.ids.victoryLayout.size = self.size[0] / 2, self.size[1] / 2
+        victoryPopup.ids.victoryLayout.pos = self.center_x / 2, self.center_y / 2
+        return victoryPopup
+
     def next_question(self):
         if len(self.vragen) > 1:
             current = self.ids.my_progress_bar.value
@@ -121,7 +133,21 @@ class MyLayout(Widget):
             self.ids.my_label.value = current_question
             self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
         else:
-            print("out")
+            #TODO POPUP scherm victory
+            popupLayout = ModalView(size_hint=(None, None))
+            popupLayout.add_widget(self.create_Victory_Popup())
+            popupLayout.open()
+
+            #time.sleep(5)
+            #popupLayout.dismiss()
+            #restart
+            self.vragen = self.tienrandom()
+            self.ids.my_label_question.text = self.vragen[0]
+            self.ids.my_progress_bar.value = 0.20
+            self.ids.my_label.value = 1
+            self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
+
+
 
     #checkt of er een error is, als er meer dan 2 voorwerpen zijn opgetild
     def checkErr(self):
@@ -194,7 +220,6 @@ class MyLayout(Widget):
             #TODO Antwoord weghalen van veld
             print("voorwerp opgetilt")
         else:
-            print(self.vragen[0])
             vraag_index = questions.index(self.vragen[0])
             if antwoordeVragen[vraag_index] in message:
                 self.next_question()
@@ -210,6 +235,14 @@ class MyLayout(Widget):
         if(message[0] == 'a'):
             self.antwoordBerichtChecken(message)
         elif(message == "reset"):
+            #restart
+            self.vragen = self.tienrandom()
+            self.ids.my_label_question.text = self.vragen[0]
+            self.ids.my_progress_bar.value = 0.20
+            self.ids.my_label.value = 1
+            self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
+
+            #TODO popup?
             print("reset")
         else:
             #filtert op slechte inputs. Alleen inputs van de arduino dat begint met een nummer of a worden toegelaten
