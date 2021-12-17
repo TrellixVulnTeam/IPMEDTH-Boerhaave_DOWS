@@ -112,6 +112,9 @@ class MyLayout(Widget):
         victoryPopup.ids.victoryLayout.pos = self.center_x / 2, self.center_y / 2
         return victoryPopup
 
+    def closePopup(self, dt):
+        self.victoryScreen.dismiss()
+
     def next_question(self):
         if len(self.vragen) > 1:
             current = self.ids.my_progress_bar.value
@@ -133,13 +136,13 @@ class MyLayout(Widget):
             self.ids.my_label.value = current_question
             self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
         else:
-            #TODO POPUP scherm victory
-            popupLayout = ModalView(size_hint=(None, None))
-            popupLayout.add_widget(self.create_Victory_Popup())
-            popupLayout.open()
+            #maakt de victory popup TODO: Layout maken
+            self.victoryScreen = ModalView(size_hint=(None, None))
+            self.victoryScreen.add_widget(self.create_Victory_Popup())
+            self.victoryScreen.open()
+            #automisch de popup weghalen na 5 seconden
+            Clock.schedule_once(self.closePopup, 5)
 
-            #time.sleep(5)
-            #popupLayout.dismiss()
             #restart
             self.vragen = self.tienrandom()
             self.ids.my_label_question.text = self.vragen[0]
