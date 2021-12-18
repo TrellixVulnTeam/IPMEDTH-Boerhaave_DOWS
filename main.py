@@ -19,6 +19,7 @@ Builder.load_file('BasisSchermLayout.kv')
 Builder.load_file('info.kv')
 Builder.load_file('error.kv')
 Builder.load_file('victory.kv')
+Builder.load_file('restart.kv')
 
 voorwerpPlaatsen = [1,1,1,1,1,1]
 voorwerpNamen = ["Maan Kraters", "Maan Saturnus", "Telescoop", "Manen Jupiter", "Sun-centered", "Ringen Saturnus"]
@@ -60,7 +61,8 @@ class Instruction(Widget):
     pass
 class VictoryPopup(Widget):
     pass
-
+class RestartPopup(Widget):
+    pass
 
 
 class MyLayout(Widget):
@@ -111,6 +113,15 @@ class MyLayout(Widget):
         victoryPopup.ids.victoryLayout.size = self.size[0] / 2, self.size[1] / 2
         victoryPopup.ids.victoryLayout.pos = self.center_x / 2, self.center_y / 2
         return victoryPopup
+
+    def createRestartPopup(self):
+        restartPopup = RestartPopup()
+        with restartPopup.ids.restartLayout.canvas.before:
+            Color(0.1,0.1,0.1, 1)
+            Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
+        restartPopup.ids.restartLayout.size = self.size[0] / 2, self.size[1] / 2
+        restartPopup.ids.restartLayout.pos = self.center_x / 2, self.center_y / 2
+        return restartPopup
 
     def closePopup(self, dt):
         self.victoryScreen.dismiss()
@@ -231,6 +242,14 @@ class MyLayout(Widget):
                 print("TODO: fout")
 
 
+    def closeRestartPopup(self, dt):
+        self.restartScreen.dismiss()
+        #restart vragen
+        self.vragen = self.tienrandom()
+        self.ids.my_label_question.text = self.vragen[0]
+        self.ids.my_progress_bar.value = 0.20
+        self.ids.my_label.value = 1
+        self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
 
     #checkt het bericht dat de machine krijgt van de Arduino
     def arduinoCheck(self, message):
@@ -238,15 +257,12 @@ class MyLayout(Widget):
         if(message[0] == 'a'):
             self.antwoordBerichtChecken(message)
         elif(message == "reset"):
-            #restart
-            self.vragen = self.tienrandom()
-            self.ids.my_label_question.text = self.vragen[0]
-            self.ids.my_progress_bar.value = 0.20
-            self.ids.my_label.value = 1
-            self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
-
-            #TODO popup?
-            print("reset")
+            #restart popup
+            self.restartScreen = ModalView(size_hint=(None, None))
+            self.restartScreen.add_widget(self.createRestartPopup())
+            self.restartScreen.open()
+            #automisch de popup weghalen na 5 seconden
+            Clock.schedule_once(self.closeRestartPopup, 3)
         else:
             #filtert op slechte inputs. Alleen inputs van de arduino dat begint met een nummer of a worden toegelaten
             try:
