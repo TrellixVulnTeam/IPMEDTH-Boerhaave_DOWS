@@ -15,13 +15,27 @@ import serial
 import time
 import random
 
-#import RPi.GPIO as GPIO
-#GPIO.setmode(GPIO.BCM)
+"""
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
 
-#led_antwoord_goed = 20
-#led_antwoord_fout = 16
-#GPIO.setup(led_antwoord_goed, GPIO.OUT)
-#GPIO.setup(led_antwoord_fout, GPIO.OUT)
+led_antwoord_goed = 20
+led_antwoord_fout = 16
+led_mn = 26
+led_sn = 19
+led_ts = 13
+led_jm = 6
+led_sc = 5
+led_rs = 21
+GPIO.setup(led_antwoord_goed, GPIO.OUT)
+GPIO.setup(led_antwoord_fout, GPIO.OUT)
+GPIO.setup(led_mn, GPIO.OUT)
+GPIO.setup(led_sn, GPIO.OUT)
+GPIO.setup(led_ts, GPIO.OUT)
+GPIO.setup(led_jm, GPIO.OUT)
+GPIO.setup(led_sc, GPIO.OUT)
+GPIO.setup(led_rs, GPIO.OUT)
+"""
 
 
 Builder.load_file('BasisSchermLayout.kv')
@@ -65,6 +79,10 @@ class InfoTelescoop(Widget):
 class InfoJupiter(Widget):
     pass
 class InfoMoon(Widget):
+    pass
+class InfoSunCentered(Widget):
+    pass
+class InfoRings(Widget):
     pass
 class Instruction(Widget):
     pass
@@ -173,6 +191,20 @@ class MyLayout(Widget):
             self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
 
 
+    def lichtAanzetten(self, nummerNFCreader):
+        if nummerNFCreader == 0:
+            GPIO.output(led_mn, GPIO.HIGH)
+        elif nummerNFCreader == 1:
+            GPIO.output(led_sn, GPIO.HIGH)
+        elif nummerNFCreader == 2:
+            GPIO.output(led_ts, GPIO.HIGH)
+        elif nummerNFCreader == 3:
+            GPIO.output(led_jm, GPIO.HIGH)
+        elif nummerNFCreader == 4:
+            GPIO.output(led_sc, GPIO.HIGH)
+        elif nummerNFCreader == 5:
+            GPIO.output(led_rs, GPIO.HIGH)
+
 
     #checkt of er een error is, als er meer dan 2 voorwerpen zijn opgetild
     def checkErr(self):
@@ -222,6 +254,8 @@ class MyLayout(Widget):
     #als een voorwerp wordt opgepakt, checkt welk voorwerp het is en of er teveel zijn opgetild
     def optillenVoorwerpCheck(self, nummerNFCreader):
         voorwerpPlaatsen[nummerNFCreader] = 0
+        #self.lichtAanzetten(nummerNFCreader)
+
         #als er meer dan 2 voorwerpen zijn opgetilt, ga naar error scherm
         if voorwerpPlaatsen.count(0) > 1:
             self.checkErr()
@@ -236,6 +270,10 @@ class MyLayout(Widget):
                 self.ids.info_scherm.add_widget(InfoTelescoop())
             if nummerNFCreader == 3:
                 self.ids.info_scherm.add_widget(InfoJupiter())
+            if nummerNFCreader == 4:
+                self.ids.info_scherm.add_widget(InfoSunCentered())
+            if nummerNFCreader == 5:
+                self.ids.info_scherm.add_widget(InfoRings())
 
     #functie die checkt wat voor antwoord bericht er van de arduino wordt verstuurd
     def antwoordBerichtChecken(self, message):
@@ -288,29 +326,42 @@ class MyLayout(Widget):
                 #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
                 elif numberReader == 0:
                     if "mn" in message:
-                    #    self.ids.info_scherm.clear_widgets()
+                        #GPIO.output(led_mn, GPIO.LOW)
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 1:
                     if "sn" in message:
-                        print("in")
-                    #    self.ids.info_scherm.clear_widgets()
+                        #GPIO.output(led_sn, GPIO.LOW)
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 2:
                     if "ts" in message:
-                    #    self.ids.info_scherm.clear_widgets()
+                        #GPIO.output(led_ts, GPIO.LOW)
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 3:
                     if "jm" in message:
-                    #    self.ids.info_scherm.clear_widgets()
+                        #GPIO.output(led_jm, GPIO.LOW)
+                        voorwerpPlaatsen[numberReader] = 1
+                        self.terugzettenErrorCheck()
+                    else:
+                        print("error")
+                elif numberReader == 4:
+                    if "sc" in message:
+                        #GPIO.output(led_sc, GPIO.LOW)
+                        voorwerpPlaatsen[numberReader] = 1
+                        self.terugzettenErrorCheck()
+                    else:
+                        print("error")
+                elif numberReader == 5:
+                    if "rs" in message:
+                        #GPIO.output(led_rs, GPIO.LOW)
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
@@ -338,6 +389,12 @@ class MyLayout(Widget):
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 3:
                     self.ids.info_scherm.clear_widgets()
                     self.ids.info_scherm.add_widget(InfoJupiter())
+                elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 4:
+                    self.ids.info_scherm.clear_widgets()
+                    self.ids.info_scherm.add_widget(InfoSunCentered())
+                elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 5:
+                    self.ids.info_scherm.clear_widgets()
+                    self.ids.info_scherm.add_widget(InfoRings())
         else:
             self.checkErr()
 

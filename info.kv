@@ -138,3 +138,65 @@
             padding_x: 50
             font_size: 25
             text: "Galileo Galilei gebruikte zijn nieuwe telescoop om in de ruimte te kijken in 1810. Hij zag 3 heldere lichten rond Jupiter. Eerst dacht hij dat dit sterren waren. Maar deze “sterren” bewogen een verkeerde kant op, ze veranderde hun positie. Galileo zag zelfs nog een 4de “ster”. Na een tijdje dacht Galileo dat het geen sterren waren, maar objecten dat in een baan rond Jupiter draaien. Later kregen deze manen de namen: Io, Europa, Ganymede en Callisto. De grootste manen van Jupiter. "
+
+<InfoSunCentered>:
+    canvas.before:
+        Color:
+            rgba: (	21/255,21/255,21/255,1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+    BoxLayout:
+        oreintation: 'vertical'
+        size: root.size
+        padding: [50, 0, 50, 100]
+
+        BoxLayout:
+            canvas:
+                Color:
+                    rgb: 1, 1, 1
+                Ellipse:
+                    size: (self.width * 0.8) , (self.width * 0.8)
+                    source: 'images/sunCentered.jpg'
+                    pos: [self.center_x - (self.width * 0.8)/2, self.center_y - (self.width * 0.8)/2]
+                    angle_start: 0
+                    angle_end: 360
+
+        Label:
+            text_size: self.width, None
+            padding_x: 50
+            font_size: 25
+            text: "In 1543 publiceerde Nicolaus Copernicus zijn levenswerk met de theorie dat niet de aarde maar de zon centraal stond in de ruimte. De planetariums daarna gebouwd werden hadden weinig weg van het nieuwe wereldbeeld. Later tussen 1662 – 1702 door Steven Tracy werd de Leidsche Sphaera gebouwd. Hier stond de zon wel als centraal punt. "
+
+<InfoRings>:
+    canvas.before:
+        Color:
+            rgba: (	21/255,21/255,21/255,1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+    BoxLayout:
+        oreintation: 'vertical'
+        size: root.size
+        padding: [50, 0, 50, 100]
+
+        BoxLayout:
+            canvas:
+                Color:
+                    rgb: 1, 1, 1
+                Ellipse:
+                    size: (self.width * 0.8) , (self.width * 0.8)
+                    source: 'images/rings.jpg'
+                    pos: [self.center_x - (self.width * 0.8)/2, self.center_y - (self.width * 0.8)/2]
+                    angle_start: 0
+                    angle_end: 360
+
+        Label:
+            text_size: self.width, None
+            padding_x: 50
+            font_size: 25
+            text: "Galileo Galilei was de eerste persoon die de ringen van Saturnus heeft geobserveerd echter dacht hij dat het geen ringen waren, maar soort van handels. Later kwam Christiaan Huygens die met zijn eigen telescoop ontdekte dat Saturnus omringt was door ringen die de planeet nergens aanraakt. De ringen bestaan uit ijs en stenen. De stenen zijn stukken komeet, meteoriet en kapotte maan stukken."
