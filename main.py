@@ -106,10 +106,12 @@ class MyLayout(Widget):
 
 
     def create_Victory_Popup(self):
+        print("in")
         victoryPopup = VictoryPopup()
         with victoryPopup.ids.victoryLayout.canvas.before:
             Color(0.1,0.1,0.1, 1)
             Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
+        print("init")
         victoryPopup.ids.victoryLayout.size = self.size[0] / 2, self.size[1] / 2
         victoryPopup.ids.victoryLayout.pos = self.center_x / 2, self.center_y / 2
         return victoryPopup
