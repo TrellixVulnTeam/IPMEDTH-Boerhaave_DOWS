@@ -15,6 +15,15 @@ import serial
 import time
 import random
 
+#import RPi.GPIO as GPIO
+#GPIO.setmode(GPIO.BCM)
+
+#led_antwoord_goed = 20
+#led_antwoord_fout = 16
+#GPIO.setup(led_antwoord_goed, GPIO.OUT)
+#GPIO.setup(led_antwoord_fout, GPIO.OUT)
+
+
 Builder.load_file('BasisSchermLayout.kv')
 Builder.load_file('info.kv')
 Builder.load_file('error.kv')
@@ -234,13 +243,16 @@ class MyLayout(Widget):
         #a_none
         if "none" in message:
             #TODO Antwoord weghalen van veld
+            #GPIO.output(led_antwoord_goed, GPIO.LOW)
+            #GPIO.output(led_antwoord_fout, GPIO.LOW)
             print("voorwerp opgetilt")
         else:
             vraag_index = questions.index(self.vragen[0])
             if antwoordeVragen[vraag_index] in message:
+                #GPIO.output(led_antwoord_goed, GPIO.HIGH)
                 self.next_question()
             else:
-                #TODO fout antwoord
+                #GPIO.output(led_antwoord_fout, GPIO.HIGH)
                 print("TODO: fout")
 
 
@@ -343,5 +355,6 @@ if __name__ == '__main__':
   Config.write()
   #setup van de serial poort waar de pi naar luistert
   ser = serial.Serial('COM4', 9600, timeout=1)
+  #ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
   ser.reset_input_buffer()
   MyApp().run()
