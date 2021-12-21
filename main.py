@@ -103,6 +103,19 @@ class MyLayout(Widget):
         Clock.schedule_interval(self.timer, refresh_time)
         self.popup = ModalView(size_hint=(None, None))
 
+        #bezig
+        self.reset_timer = Clock.create_trigger(self.testing, 4)
+        self.reset_timer()
+        self.myTime = 0
+        Clock.schedule_interval(self.increaseTimer, 1)
+
+    def testing(self, dt):
+        print(self.myTime)
+        print("test")
+
+    def increaseTimer(self, dt):
+        self.myTime += 1
+
     def press_it(self):
         current = self.ids.my_progress_bar.value
         current_question = self.ids.my_label.value
@@ -283,11 +296,13 @@ class MyLayout(Widget):
             #TODO Antwoord weghalen van veld
             #GPIO.output(led_antwoord_goed, GPIO.LOW)
             #GPIO.output(led_antwoord_fout, GPIO.LOW)
+            self.reset_timer()
             print("voorwerp opgetilt")
         else:
             vraag_index = questions.index(self.vragen[0])
             if antwoordeVragen[vraag_index] in message:
                 #GPIO.output(led_antwoord_goed, GPIO.HIGH)
+                self.reset_timer.cancel()
                 self.next_question()
             else:
                 #GPIO.output(led_antwoord_fout, GPIO.HIGH)
