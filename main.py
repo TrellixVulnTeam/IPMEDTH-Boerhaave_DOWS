@@ -15,12 +15,52 @@ import serial
 import time
 import random
 
+"""
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
+
+led_antwoord_goed = 20
+led_antwoord_fout = 16
+led_mn = 26
+led_sn = 19
+led_ts = 13
+led_jm = 6
+led_sc = 5
+led_rs = 21
+GPIO.setup(led_antwoord_goed, GPIO.OUT)
+GPIO.setup(led_antwoord_fout, GPIO.OUT)
+GPIO.setup(led_mn, GPIO.OUT)
+GPIO.setup(led_sn, GPIO.OUT)
+GPIO.setup(led_ts, GPIO.OUT)
+GPIO.setup(led_jm, GPIO.OUT)
+GPIO.setup(led_sc, GPIO.OUT)
+GPIO.setup(led_rs, GPIO.OUT)
+"""
+
+
 Builder.load_file('BasisSchermLayout.kv')
 Builder.load_file('info.kv')
 Builder.load_file('error.kv')
+Builder.load_file('victory.kv')
+Builder.load_file('restart.kv')
 
 voorwerpPlaatsen = [1,1,1,1,1,1]
 voorwerpNamen = ["Maan Kraters", "Maan Saturnus", "Telescoop", "Manen Jupiter", "Sun-centered", "Ringen Saturnus"]
+#questions = [['vraag1', 'mn'],
+ # ['vraag2', 'mn'],
+ # ['vraag3', 'sn'],
+ # ['vraag4', 'sn'],
+ # ['vraag5', 'ts'],
+  #['vraag6', 'ts'],
+  #['vraag7', 'jm'],
+ # ['vraag8', 'jm'],
+ # ['vraag9', 'sc'],
+ # ['vraag10', 'sc'],
+ # ['vraag11', 'rs'],
+ # ['vraag12', 'rs']]
+questions = ['vraag1','vraag2','vraag3','vraag4','vraag5','vraag6','vraag7','vraag8','vraag9','vraag10','vraag11','vraag12']
+#antwoordeVragen = ['mn','mn','sn','sn','ts','ts','jm','jm','sc','sc','rs','rs']
+antwoordeVragen = ['ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts']
 
 class RedCircle(Widget):
     pass
@@ -40,18 +80,42 @@ class InfoJupiter(Widget):
     pass
 class InfoMoon(Widget):
     pass
+class InfoSunCentered(Widget):
+    pass
+class InfoRings(Widget):
+    pass
 class Instruction(Widget):
     pass
-
+class VictoryPopup(Widget):
+    pass
+class RestartPopup(Widget):
+    pass
 
 
 
 class MyLayout(Widget):
     def __init__(self, **kwargs):
         super(MyLayout, self).__init__(**kwargs)
+        #init vragen
+        self.vragen = self.tienrandom()
+        self.ids.my_label_question.text = self.vragen[0]
+        #set timer voor arduino
         refresh_time = 0.5
         Clock.schedule_interval(self.timer, refresh_time)
         self.popup = ModalView(size_hint=(None, None))
+
+        #bezig
+        self.reset_timer = Clock.create_trigger(self.testing, 4)
+        self.reset_timer()
+        self.myTime = 0
+        Clock.schedule_interval(self.increaseTimer, 1)
+
+    def testing(self, dt):
+        print(self.myTime)
+        print("test")
+
+    def increaseTimer(self, dt):
+        self.myTime += 1
 
     def press_it(self):
         current = self.ids.my_progress_bar.value
@@ -65,23 +129,95 @@ class MyLayout(Widget):
 
         current += .20
         current_question += 1
-
-        self.ids.info_scherm.clear_widgets()
-        self.ids.info_scherm.add_widget(InfoMoon())
-
-        self.question_choser()
+        #delete de voorste vraag en pakt set de label voor nieuwe vraag
+        self.vragen.pop(0)
+        self.ids.my_label_question.text = self.vragen[0]
 
         self.ids.my_progress_bar.value = current
         self.ids.my_label.value = current_question
-        self.ids.my_label.text = f'Vraag {self.ids.my_label.value}'
+        self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
 
-    def question_choser(self):
-        questions = ['nieuwe_vraag1', 'nieuwe_vraag2', 'nieuwe_vraag3', 'nieuwe_vraag4']
+    def tienrandom(self):
+      randomvragen = []
+      maximum_questions = 5
+      randomlist = random.sample(range(0, len(questions)), maximum_questions)
+      for item in randomlist:
+        randomvragen.append(questions[item])
+      return randomvragen
 
-        while len(questions) > 0:
-          index = random.choice(questions)
-          questions.remove(index)
-          print(questions)
+
+    def create_Victory_Popup(self):
+        print("in")
+        victoryPopup = VictoryPopup()
+        with victoryPopup.ids.victoryLayout.canvas.before:
+            Color(0.1,0.1,0.1, 1)
+            Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
+        print("init")
+        victoryPopup.ids.victoryLayout.size = self.size[0] / 2, self.size[1] / 2
+        victoryPopup.ids.victoryLayout.pos = self.center_x / 2, self.center_y / 2
+        return victoryPopup
+
+    def createRestartPopup(self):
+        restartPopup = RestartPopup()
+        with restartPopup.ids.restartLayout.canvas.before:
+            Color(0.1,0.1,0.1, 1)
+            Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
+        restartPopup.ids.restartLayout.size = self.size[0] / 2, self.size[1] / 2
+        restartPopup.ids.restartLayout.pos = self.center_x / 2, self.center_y / 2
+        return restartPopup
+
+    def closePopup(self, dt):
+        self.victoryScreen.dismiss()
+
+    def next_question(self):
+        if len(self.vragen) > 1:
+            current = self.ids.my_progress_bar.value
+            current_question = self.ids.my_label.value
+
+            if current == 1:
+              current = 0
+
+            if current_question == 5:
+              current_question = 0
+
+            current += .20
+            current_question += 1
+            #delete de voorste vraag en pakt set de label voor nieuwe vraag
+            self.vragen.pop(0)
+            self.ids.my_label_question.text = self.vragen[0]
+
+            self.ids.my_progress_bar.value = current
+            self.ids.my_label.value = current_question
+            self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
+        else:
+            #maakt de victory popup TODO: Layout maken
+            self.victoryScreen = ModalView(size_hint=(None, None))
+            self.victoryScreen.add_widget(self.create_Victory_Popup())
+            self.victoryScreen.open()
+            #automisch de popup weghalen na 5 seconden
+            Clock.schedule_once(self.closePopup, 5)
+
+            #restart
+            self.vragen = self.tienrandom()
+            self.ids.my_label_question.text = self.vragen[0]
+            self.ids.my_progress_bar.value = 0.20
+            self.ids.my_label.value = 1
+            self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
+
+
+    def lichtAanzetten(self, nummerNFCreader):
+        if nummerNFCreader == 0:
+            GPIO.output(led_mn, GPIO.HIGH)
+        elif nummerNFCreader == 1:
+            GPIO.output(led_sn, GPIO.HIGH)
+        elif nummerNFCreader == 2:
+            GPIO.output(led_ts, GPIO.HIGH)
+        elif nummerNFCreader == 3:
+            GPIO.output(led_jm, GPIO.HIGH)
+        elif nummerNFCreader == 4:
+            GPIO.output(led_sc, GPIO.HIGH)
+        elif nummerNFCreader == 5:
+            GPIO.output(led_rs, GPIO.HIGH)
 
 
     #checkt of er een error is, als er meer dan 2 voorwerpen zijn opgetild
@@ -134,6 +270,8 @@ class MyLayout(Widget):
     #als een voorwerp wordt opgepakt, checkt welk voorwerp het is en of er teveel zijn opgetild
     def optillenVoorwerpCheck(self, nummerNFCreader):
         voorwerpPlaatsen[nummerNFCreader] = 0
+        #self.lichtAanzetten(nummerNFCreader)
+
         #als er meer dan 2 voorwerpen zijn opgetilt, ga naar error scherm
         if voorwerpPlaatsen.count(0) > 1:
             self.checkErr()
@@ -148,17 +286,40 @@ class MyLayout(Widget):
                 self.ids.info_scherm.add_widget(InfoTelescoop())
             if nummerNFCreader == 3:
                 self.ids.info_scherm.add_widget(InfoJupiter())
+            if nummerNFCreader == 4:
+                self.ids.info_scherm.add_widget(InfoSunCentered())
+            if nummerNFCreader == 5:
+                self.ids.info_scherm.add_widget(InfoRings())
 
     #functie die checkt wat voor antwoord bericht er van de arduino wordt verstuurd
     def antwoordBerichtChecken(self, message):
+        print(message)
         #a_none
         if "none" in message:
             #TODO Antwoord weghalen van veld
+            #GPIO.output(led_antwoord_goed, GPIO.LOW)
+            #GPIO.output(led_antwoord_fout, GPIO.LOW)
+            self.reset_timer()
             print("voorwerp opgetilt")
-        #a_sn
-        elif "sn" in message:
-            #TODO ALLE ANTWOORDEN TOEVOEGEN
-            print("antwoord")
+        else:
+            vraag_index = questions.index(self.vragen[0])
+            if antwoordeVragen[vraag_index] in message:
+                #GPIO.output(led_antwoord_goed, GPIO.HIGH)
+                self.reset_timer.cancel()
+                self.next_question()
+            else:
+                #GPIO.output(led_antwoord_fout, GPIO.HIGH)
+                print("TODO: fout")
+
+
+    def closeRestartPopup(self, dt):
+        self.restartScreen.dismiss()
+        #restart vragen
+        self.vragen = self.tienrandom()
+        self.ids.my_label_question.text = self.vragen[0]
+        self.ids.my_progress_bar.value = 0.20
+        self.ids.my_label.value = 1
+        self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
 
     #checkt het bericht dat de machine krijgt van de Arduino
     def arduinoCheck(self, message):
@@ -166,7 +327,12 @@ class MyLayout(Widget):
         if(message[0] == 'a'):
             self.antwoordBerichtChecken(message)
         elif(message == "reset"):
-            print("reset")
+            #restart popup
+            self.restartScreen = ModalView(size_hint=(None, None))
+            self.restartScreen.add_widget(self.createRestartPopup())
+            self.restartScreen.open()
+            #automisch de popup weghalen na 5 seconden
+            Clock.schedule_once(self.closeRestartPopup, 3)
         else:
             #filtert op slechte inputs. Alleen inputs van de arduino dat begint met een nummer of a worden toegelaten
             try:
@@ -178,29 +344,42 @@ class MyLayout(Widget):
                 #checks of het voorwerp dat neergezet wordt, overheen komt met wat er hoort te staan
                 elif numberReader == 0:
                     if "mn" in message:
-                    #    self.ids.info_scherm.clear_widgets()
+                        #GPIO.output(led_mn, GPIO.LOW)
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 1:
                     if "sn" in message:
-                        print("in")
-                    #    self.ids.info_scherm.clear_widgets()
+                        #GPIO.output(led_sn, GPIO.LOW)
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 2:
                     if "ts" in message:
-                    #    self.ids.info_scherm.clear_widgets()
+                        #GPIO.output(led_ts, GPIO.LOW)
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
                         print("error")
                 elif numberReader == 3:
                     if "jm" in message:
-                    #    self.ids.info_scherm.clear_widgets()
+                        #GPIO.output(led_jm, GPIO.LOW)
+                        voorwerpPlaatsen[numberReader] = 1
+                        self.terugzettenErrorCheck()
+                    else:
+                        print("error")
+                elif numberReader == 4:
+                    if "sc" in message:
+                        #GPIO.output(led_sc, GPIO.LOW)
+                        voorwerpPlaatsen[numberReader] = 1
+                        self.terugzettenErrorCheck()
+                    else:
+                        print("error")
+                elif numberReader == 5:
+                    if "rs" in message:
+                        #GPIO.output(led_rs, GPIO.LOW)
                         voorwerpPlaatsen[numberReader] = 1
                         self.terugzettenErrorCheck()
                     else:
@@ -252,5 +431,6 @@ if __name__ == '__main__':
   Config.write()
   #setup van de serial poort waar de pi naar luistert
   ser = serial.Serial('COM4', 9600, timeout=1)
+  #ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
   ser.reset_input_buffer()
   MyApp().run()

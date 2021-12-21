@@ -39,7 +39,7 @@ void setup() {
   }
 
   Serial.println("Tap RFID/NFC Tag on reader");
- // pinMode(pushButton, INPUT);
+  pinMode(pushButton, INPUT);
 }
 
 void check_code(String code, uint8_t numberReader){
@@ -108,7 +108,7 @@ void resetScan(){
 
 void loop() {
   //checkt of de "reset" knop is in gedruk
- /* if(digitalRead(pushButton)){
+  if(digitalRead(pushButton)){
       if(digitalRead(pushButton) && !(buttonPressed)){
       buttonPressed = true;
       resetScan();
@@ -117,10 +117,11 @@ void loop() {
   //als de knop los gelaten wordt, return naar niet ingedrukte state
   else if( !(digitalRead(pushButton)) && buttonPressed){
       buttonPressed = false;
-  }*/
+  }
   //leest de veranderingen van de NFCreaders
-  //else{
+  else{
     for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
+    
       if(mfrc522[reader].PICC_IsNewCardPresent() ){
         if(mfrc522[reader].PICC_ReadCardSerial()){
          // !! DIT IS GEEN REDUCANT CODE. HIERDOOR WERKT HET, LAAT DEZE REGEL STAAN !!!! 
@@ -152,6 +153,6 @@ void loop() {
         
       }
     }
-  //}
+  }
   
 }
