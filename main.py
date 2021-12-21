@@ -97,6 +97,7 @@ class MyLayout(Widget):
     def __init__(self, **kwargs):
         super(MyLayout, self).__init__(**kwargs)
         self.newReset = False
+        self.totalPunten = 0
         #selecteer 5 vragen
         self.vragen = self.tienrandom()
         self.ids.my_label_question.text = self.vragen[0]
@@ -116,6 +117,7 @@ class MyLayout(Widget):
     #functie die vragen reset na een lange tijd van inactie
     def inactiveRestTimer(self, dt):
         print("inactie")
+        self.totalPunten = 0;
         self.newReset = True
         self.resetVragen()
 
@@ -152,14 +154,13 @@ class MyLayout(Widget):
 
 
     def create_Victory_Popup(self):
-        print("in")
         victoryPopup = VictoryPopup()
         with victoryPopup.ids.victoryLayout.canvas.before:
             Color(0.1,0.1,0.1, 1)
             Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
-        print("init")
         victoryPopup.ids.victoryLayout.size = self.size[0] / 2, self.size[1] / 2
         victoryPopup.ids.victoryLayout.pos = self.center_x / 2, self.center_y / 2
+        victoryPopup.ids.victoryPuntenLabel.text = f"Punten: {self.totalPunten}"
         return victoryPopup
 
     def createRestartPopup(self):
@@ -211,6 +212,7 @@ class MyLayout(Widget):
         self.ids.my_progress_bar.value = 0.20
         self.ids.my_label.value = 1
         self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
+        self.totalPunten = 0
 
     def lichtAanzetten(self, nummerNFCreader):
         if nummerNFCreader == 0:
@@ -305,6 +307,7 @@ class MyLayout(Widget):
         if vraagTimer > 158:
             vraagTimer = 158
         punten = round(1000 - (vraagTimer * 6.25))
+        self.totalPunten += punten
         print(punten)
         self.pointTimer = 0
 
