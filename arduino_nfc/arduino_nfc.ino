@@ -60,8 +60,8 @@ void check_code(String code, uint8_t numberReader){
   }else if(code == " 04 77 42 07 4c d9 30"){
      arduinoMessage = arduinoMessage + "_jm";
   }else if(code == " 04 77 42 b7 aa e3 30"){
-     //arduinoMessage = arduinoMessage + "_sc";
-     arduinoMessage = arduinoMessage + "_sn";
+     arduinoMessage = arduinoMessage + "_sc";
+     //arduinoMessage = arduinoMessage + "_sn";
   }else if(code == " 04 77 42 fb 87 df 30"){
      arduinoMessage = arduinoMessage + "_rs";
   }else{

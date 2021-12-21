@@ -236,7 +236,9 @@ class MyLayout(Widget):
             if isinstance(App.get_running_app().root_window.children[0], Popup):
                 App.get_running_app().root_window.children[0].dismiss()
             #maakt de layout van de pop
+
             popupLayout = ErrorPopUp()
+
             layout = GridLayout(cols= 3, size_hint=(0.6, 0.7))
             #voegt de achtergrond toe aan de popup
             with layout.canvas.before:
@@ -245,13 +247,14 @@ class MyLayout(Widget):
 
 
             #self.popup = ModalView(size_hint=(None, None))
-            with popupLayout.backgrounderror.canvas.before:
+            with popupLayout.ids.backgrounderror.canvas.before:
                 Color(0.1,0.1,0.1, 1)
                 Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
-            popupLayout.backgrounderror.size = self.size[0] / 2, self.size[1] / 2
-            popupLayout.backgrounderror.pos = self.center_x / 2, self.center_y / 2
+            popupLayout.ids.backgrounderror.size = self.size[0] / 2, self.size[1] / 2
+            popupLayout.ids.backgrounderror.pos = self.center_x / 2, self.center_y / 2
             popupLayout.ids.tafel.padding = [(self.size[0] / 13),0,0,0]
 
+            print("error")
             #loopt door alle voorwerpen heen. Als een vorwerp is opgetild rood cirkel anders groen
             for rows in range(len(voorwerpPlaatsen)):
                 if voorwerpPlaatsen[rows] == 0:
