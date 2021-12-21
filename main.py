@@ -406,6 +406,10 @@ class MyLayout(Widget):
                     self.ids.info_scherm.add_widget(InfoTelescoop())
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 3:
                     self.ids.info_scherm.add_widget(InfoJupiter())
+                elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 4:
+                    self.ids.info_scherm.add_widget(InfoSunCentered())
+                elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 5:
+                    self.ids.info_scherm.add_widget(InfoRings())
         elif voorwerpPlaatsen.count(0) == 0:
             self.popup.dismiss()
             self.ids.info_scherm.clear_widgets()
