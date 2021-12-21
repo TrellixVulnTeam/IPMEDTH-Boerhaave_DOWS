@@ -61,6 +61,7 @@ questions = ['vraag1',
 #antwoordeVragen = ['mn','mn','sn','sn','ts','ts','jm','jm','sc','sc','rs','rs']
 antwoordeVragen = ['ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts']
 
+
 class RedCircle(Widget):
     pass
 class GreenCircle(Widget):
@@ -95,6 +96,7 @@ class RestartPopup(Widget):
 class MyLayout(Widget):
     def __init__(self, **kwargs):
         super(MyLayout, self).__init__(**kwargs)
+        self.newReset = False
         #selecteer 5 vragen
         self.vragen = self.tienrandom()
         self.ids.my_label_question.text = self.vragen[0]
@@ -103,21 +105,22 @@ class MyLayout(Widget):
         Clock.schedule_interval(self.timer, refresh_time)
         self.popup = ModalView(size_hint=(None, None))
 
-        #start inactive timer
-        seconden_wachten_inactie = 100
+        #start inactive timer. Timer staat normaal op 300 seconden
+        seconden_wachten_inactie = 5
         self.inactive_reset_timer = Clock.create_trigger(self.inactiveRestTimer, seconden_wachten_inactie)
         self.inactive_reset_timer()
-        
-        self.myTime = 0
-        Clock.schedule_interval(self.increaseTimer, 1)
+
+        self.pointTimer = 0
+        Clock.schedule_interval(self.increasePointTimer, 1)
 
     #functie die vragen reset na een lange tijd van inactie
     def inactiveRestTimer(self, dt):
         print("inactie")
+        self.newReset = True
         self.resetVragen()
 
-    def increaseTimer(self, dt):
-        self.myTime += 1
+    def increasePointTimer(self, dt):
+        self.pointTimer += 1
 
     def press_it(self):
         current = self.ids.my_progress_bar.value
@@ -295,19 +298,28 @@ class MyLayout(Widget):
             if nummerNFCreader == 5:
                 self.ids.info_scherm.add_widget(InfoRings())
 
+    def puntenOptellen(self):
+        #maximum punten per vraag is 1000. Na 160 seconden minimum punten. Formule is opgezet met 160 seconden
+        vraagTimer = self.pointTimer
+        # groter dan 158, want dan krijg je bij 160 seconden nog wat punten, in plaats van niks
+        if vraagTimer > 158:
+            vraagTimer = 158
+        punten = round(1000 - (vraagTimer * 6.25))
+        print(punten)
+        self.pointTimer = 0
+
     #functie die checkt wat voor antwoord bericht er van de arduino wordt verstuurd
     def antwoordBerichtChecken(self, message):
         print(message)
         if "none" in message:
             #GPIO.output(led_antwoord_goed, GPIO.LOW)
             #GPIO.output(led_antwoord_fout, GPIO.LOW)
-
             print("voorwerp opgetilt")
         else:
             vraag_index = questions.index(self.vragen[0])
             if antwoordeVragen[vraag_index] in message:
                 #GPIO.output(led_antwoord_goed, GPIO.HIGH)
-
+                self.puntenOptellen()
                 self.next_question()
             else:
                 #GPIO.output(led_antwoord_fout, GPIO.HIGH)
@@ -328,6 +340,13 @@ class MyLayout(Widget):
         #restart inactive timer
         self.inactive_reset_timer.cancel()
         self.inactive_reset_timer()
+        #opnieuw beginnen met tellen, zodra het een inactie reset heeft gedaan en iets wordt opgetild
+        if self.newReset:
+            self.pointTimer = 0
+            self.newReset = False
+            print("correct reset")
+
+
 
         #als het met een a begint, dan gaat het om de antwoord reader
         if(message[0] == 'a'):
