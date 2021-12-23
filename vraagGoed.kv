@@ -1,0 +1,20 @@
+
+<PuntenPopup>
+    AnchorLayout:
+        id: puntenWindow
+        anchor_x: 'center'
+        anchor_y: 'center'
+        pos_hint: {'x': 0, 'top': 1}
+        GridLayout:
+            cols: 1
+            Label:
+                text: "Goed beantwoord"
+                font_size: 50
+            Label:
+                id: PuntenVerdientLabel
+                text: "Punten erbij: + 0"
+                font_size: 45
+            Label:
+                id: totaalPuntenLabel
+                text: "totale punten: 0"
+                font_size: 45

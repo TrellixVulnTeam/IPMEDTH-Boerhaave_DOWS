@@ -43,21 +43,22 @@ Builder.load_file('info.kv')
 Builder.load_file('error.kv')
 Builder.load_file('victory.kv')
 Builder.load_file('restart.kv')
+Builder.load_file('vraagGoed.kv')
 
 voorwerpPlaatsen = [1,1,1,1,1,1]
 voorwerpNamen = ["Maan Kraters", "Maan Saturnus", "Telescoop", "Manen Jupiter", "Sun-centered", "Ringen Saturnus"]
-questions = ['vraag1',
-'vraag2',
-'vraag3',
-'vraag4',
-'vraag5',
-'vraag6',
-'vraag7',
-'vraag8',
-'vraag9',
-'vraag10',
-'vraag11',
-'vraag12']
+questions = ['Wat heeft Galileo Galilei ontdekt met zijn eerste telescoop?',
+'Deze rots is niet helemaal rond, maar door meteorieten en vulkanen is de planeet zo geworden, om welke planeet gaat het hier? ',
+'Welke maan heeft Christiaan Huygens ontdekt?',
+'Wat is de nieuwe maan van Saturnus die ontdekt is?',
+'Door Hans Lippenshey werd dit ding voor het eerst gebouwd in 1608, om welk ding gaat het?',
+'Galileo Galilei heeft deze zelf een gebouw om ontdekkingen mee te doen, wat is het?',
+'De namen van deze planeten zijn Io, Ganymedes, Europa en Callisto wat zijn dit?',
+'Het leek op een groep sterren, maar was het uiteindelijk niet was waren ze wel?',
+'Door de theorie van Nicolas Copernicus was dit het nieuwe wereldbeeld, wat was zijn theorie?',
+'De Leidsche Sphaera is nagebouwd met dit nieuwe wereldbeeld, wat was het voor wereldbeeld?',
+'Dit was voor het eerst geobserveerd door Galileo Galilei, wat was dat?',
+'Dit bestaat uit stenen stukken komeet, meteoriet en kapotte maanstukken, wat is dit?']
 #antwoordeVragen = ['mn','mn','sn','sn','ts','ts','jm','jm','sc','sc','rs','rs']
 antwoordeVragen = ['ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts']
 
@@ -89,6 +90,8 @@ class Instruction(Widget):
 class VictoryPopup(Widget):
     pass
 class RestartPopup(Widget):
+    pass
+class PuntenPopup(Widget):
     pass
 
 
@@ -153,6 +156,7 @@ class MyLayout(Widget):
       return randomvragen
 
 
+    #Deze functie maakt de Victory Popup. In de functie staat de afmetingen. Verder code in victory.kv
     def create_Victory_Popup(self):
         victoryPopup = VictoryPopup()
         with victoryPopup.ids.victoryLayout.canvas.before:
@@ -163,6 +167,7 @@ class MyLayout(Widget):
         victoryPopup.ids.victoryPuntenLabel.text = f"Punten: {self.totalPunten}"
         return victoryPopup
 
+    #Deze functie maakt de restart Popup. In de functie staat de afmetingen. Verder code in restart.kv
     def createRestartPopup(self):
         restartPopup = RestartPopup()
         with restartPopup.ids.restartLayout.canvas.before:
@@ -172,8 +177,23 @@ class MyLayout(Widget):
         restartPopup.ids.restartLayout.pos = self.center_x / 2, self.center_y / 2
         return restartPopup
 
+    #Deze functie maakt de restart Popup. In de functie staat de afmetingen. Verder code in restart.kv
+    def createVraagGooedPopup(self, punten):
+        puntenPopup = PuntenPopup()
+        with puntenPopup.ids.puntenWindow.canvas.before:
+            Color(0.1,0.1,0.1, 1)
+            Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
+        puntenPopup.ids.puntenWindow.size = self.size[0] / 2, self.size[1] / 2
+        puntenPopup.ids.puntenWindow.pos = self.center_x / 2, self.center_y / 2
+        puntenPopup.ids.PuntenVerdientLabel.text = f"Punten erbij: +{punten}"
+        puntenPopup.ids.totaalPuntenLabel.text = f"Punten totaal: {self.totalPunten}"
+        return puntenPopup
+
     def closePopup(self, dt):
         self.victoryScreen.dismiss()
+
+    def closePuntenPopup(self, dt):
+        self.puntenWindow.dismiss()
 
     def next_question(self):
         if len(self.vragen) > 1:
@@ -313,6 +333,7 @@ class MyLayout(Widget):
         self.totalPunten += punten
         print(punten)
         self.pointTimer = 0
+        return punten
 
     #functie die checkt wat voor antwoord bericht er van de arduino wordt verstuurd
     def antwoordBerichtChecken(self, message):
@@ -325,7 +346,13 @@ class MyLayout(Widget):
             vraag_index = questions.index(self.vragen[0])
             if antwoordeVragen[vraag_index] in message:
                 #GPIO.output(led_antwoord_goed, GPIO.HIGH)
-                self.puntenOptellen()
+                punten = self.puntenOptellen()
+                #punten popup
+                self.puntenWindow = ModalView(size_hint=(None, None))
+                self.puntenWindow.add_widget(self.createVraagGooedPopup(punten))
+                self.puntenWindow.open()
+                #automisch de popup weghalen na 3 seconden
+                Clock.schedule_once(self.closePuntenPopup, 3)
                 self.next_question()
             else:
                 #GPIO.output(led_antwoord_fout, GPIO.HIGH)
