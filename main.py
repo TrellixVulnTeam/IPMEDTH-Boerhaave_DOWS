@@ -177,7 +177,7 @@ class MyLayout(Widget):
         restartPopup.ids.restartLayout.pos = self.center_x / 2, self.center_y / 2
         return restartPopup
 
-    #Deze functie maakt de restart Popup. In de functie staat de afmetingen. Verder code in restart.kv
+    #Deze functie maakt de punten Popup. In de functie staat de afmetingen. Verder code in vraagGoed.kv
     def createVraagGooedPopup(self, punten):
         puntenPopup = PuntenPopup()
         with puntenPopup.ids.puntenWindow.canvas.before:
