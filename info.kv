@@ -23,37 +23,6 @@
             text_size: self.width, None
             #height: 100
 
-
-
-<InfoSaturnMoon>:
-    canvas.before:
-        Color:
-            rgba: (	21/255,21/255,21/255,1)
-        Rectangle:
-            pos: self.pos
-            size: self.size
-    BoxLayout:
-        oreintation: 'vertical'
-        size: root.size
-        padding: [50, 0, 50, 100]
-
-        BoxLayout:
-            canvas:
-                Color:
-                    rgb: 1, 1, 1
-                Ellipse:
-                    size: (self.width * 0.8) , (self.width * 0.8)
-                    source: 'images/titan.jpg'
-                    pos: [self.center_x - (self.width * 0.8)/2, self.center_y - (self.width * 0.8)/2]
-                    angle_start: 0
-                    angle_end: 360
-
-        Label:
-            text_size: self.width, None
-            padding_x: 50
-            font_size: 25
-            text: "In 1655 ontdekte Christiaan Huygens een maan rond Saturnus, Titan.    Huygens had met zijn broer een nieuwe telescoop gemaakt, waardoor ze beter verder in het zonnestelsel konden kijken, waardoor ze Titan ontdekt. Ze noemde te maan: 'Saturni Luna' (Saturnusmaan).Dit was de zesde maan dat ontdekt werd in het zonnestelsel. "
-
 <InfoMoon>:
     canvas.before:
         Color:
@@ -64,9 +33,9 @@
 
 
     BoxLayout:
+        id: infoMoonBox
         oreintation: 'vertical'
         size: root.size
-        padding: [50, 0, 50, 100]
 
         BoxLayout:
             canvas:
@@ -79,11 +48,46 @@
                     angle_start: 0
                     angle_end: 360
 
-        Label:
-            text_size: self.width, None
-            padding_x: 50
-            font_size: 25
-            text: "Galileo werkte in 1809 aan een eerste telescoop. Met deze telescoop ontdekte hij dat de maan niet een perfecte bol is. De maan had, net zoals de Aarde, bergen en dallen. Galileo berekende dat sommige bergen zelfs 6 km hoog waren. \n \n Robert Hooke stelde twee hypotheses op waarom deze bergen en dallen er waren in 1665. Hij beschreef dat het door een bombardement vanuit de ruimte komt of door vulkanische uitbarstingen op de maan."
+        BoxLayout:
+            id: infoMoonTextBox
+            Label:
+                id: infoMoonText
+                text_size: 800, None
+                font_size: 20
+                text: "Galileo werkte in 1809 aan een eerste telescoop. Met deze telescoop ontdekte hij dat de maan niet een perfecte bol is. De maan had, net zoals de Aarde, bergen en dallen. Galileo berekende dat sommige bergen zelfs 6 km hoog waren. \n \n Robert Hooke stelde twee hypotheses op waarom deze bergen en dallen er waren in 1665. Hij beschreef dat het door een bombardement vanuit de ruimte komt of door vulkanische uitbarstingen op de maan."
+
+<InfoSaturnMoon>:
+    canvas.before:
+        Color:
+            rgba: (	21/255,21/255,21/255,1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        id: infoSaturnMoonBox
+        oreintation: 'vertical'
+        size: root.size
+
+        BoxLayout:
+            canvas:
+                Color:
+                    rgb: 1, 1, 1
+                Ellipse:
+                    size: (self.width * 0.8) , (self.width * 0.8)
+                    source: 'images/titan.jpg'
+                    pos: [self.center_x - (self.width * 0.8)/2, self.center_y - (self.width * 0.8)/2]
+                    angle_start: 0
+                    angle_end: 360
+
+        BoxLayout:
+            id: infoSaturnMoonTextBox
+            Label:
+                id: infoSaturnMoonText
+                text_size: 500, None
+                font_size: 20
+                text: "In 1655 ontdekte Christiaan Huygens een maan rond Saturnus, Titan.    Huygens had met zijn broer een nieuwe telescoop gemaakt, waardoor ze beter verder in het zonnestelsel konden kijken, waardoor ze Titan ontdekt. Ze noemde te maan: 'Saturni Luna' (Saturnusmaan).Dit was de zesde maan dat ontdekt werd in het zonnestelsel. "
+
+
 
 <InfoTelescoop>:
     canvas.before:
@@ -95,9 +99,9 @@
 
 
     BoxLayout:
+        id: infoTelescoopBox
         oreintation: 'vertical'
         size: root.size
-        padding: [50, 0, 50, 100]
 
         BoxLayout:
             canvas:
@@ -110,11 +114,13 @@
                     angle_start: 0
                     angle_end: 360
 
-        Label:
-            text_size: self.width, None
-            padding_x: 50
-            font_size: 25
-            text: "De refractor telescoop was één van de eerste optische telescopen. Een Nederlandse glazen maker, Hans Lipperhey, had in 1608 de eerste refractor telescoop gemaakt. Maar het was Galileo Galilei die als een refractor telescoop gemaakt heeft om naar de ruimte te kijken. \n\n Zijn telescoop gaf geen helderbeeld weer, maar toch heeft Galilei verschillende ontdekkingen kunnen doen met zijn telescoop. "
+        BoxLayout:
+            id: infoTelescoopTextBox
+            Label:
+                id: infoTelescoopText
+                text_size: 500, None
+                font_size: 20
+                text: "De refractor telescoop was één van de eerste optische telescopen. Een Nederlandse glazen maker, Hans Lipperhey, had in 1608 de eerste refractor telescoop gemaakt. Maar het was Galileo Galilei die als een refractor telescoop gemaakt heeft om naar de ruimte te kijken. \n\n Zijn telescoop gaf geen helderbeeld weer, maar toch heeft Galilei verschillende ontdekkingen kunnen doen met zijn telescoop. "
 
 <InfoJupiter>:
     canvas.before:
@@ -126,9 +132,9 @@
 
 
     BoxLayout:
+        id: infoJupiterBox
         oreintation: 'vertical'
         size: root.size
-        padding: [50, 0, 50, 100]
 
         BoxLayout:
             canvas:
@@ -141,11 +147,13 @@
                     angle_start: 0
                     angle_end: 360
 
-        Label:
-            text_size: self.width, None
-            padding_x: 50
-            font_size: 25
-            text: "Galileo Galilei gebruikte zijn nieuwe telescoop om in de ruimte te kijken in 1810. Hij zag 3 heldere lichten rond Jupiter. Eerst dacht hij dat dit sterren waren. Maar deze “sterren” bewogen een verkeerde kant op, ze veranderde hun positie. Galileo zag zelfs nog een 4de “ster”. Na een tijdje dacht Galileo dat het geen sterren waren, maar objecten dat in een baan rond Jupiter draaien. Later kregen deze manen de namen: Io, Europa, Ganymede en Callisto. De grootste manen van Jupiter. "
+        BoxLayout:
+            id: infoJupiterTextBox
+            Label:
+                id: infoJupiterText
+                text_size: 500, None
+                font_size: 20
+                text: "Galileo Galilei gebruikte zijn nieuwe telescoop om in de ruimte te kijken in 1810. Hij zag 3 heldere lichten rond Jupiter. Eerst dacht hij dat dit sterren waren. Maar deze “sterren” bewogen een verkeerde kant op, ze veranderde hun positie. Galileo zag zelfs nog een 4de “ster”. Na een tijdje dacht Galileo dat het geen sterren waren, maar objecten dat in een baan rond Jupiter draaien. Later kregen deze manen de namen: Io, Europa, Ganymede en Callisto. De grootste manen van Jupiter. "
 
 <InfoSunCentered>:
     canvas.before:
@@ -157,9 +165,10 @@
 
 
     BoxLayout:
+        id: infoSunCenteredBox
         oreintation: 'vertical'
         size: root.size
-        padding: [50, 0, 50, 100]
+
 
         BoxLayout:
             canvas:
@@ -172,11 +181,13 @@
                     angle_start: 0
                     angle_end: 360
 
-        Label:
-            text_size: self.width, None
-            padding_x: 50
-            font_size: 25
-            text: "In 1543 publiceerde Nicolaus Copernicus zijn levenswerk met de theorie dat niet de aarde maar de zon centraal stond in de ruimte. De planetariums daarna gebouwd werden hadden weinig weg van het nieuwe wereldbeeld. Later tussen 1662 – 1702 door Steven Tracy werd de Leidsche Sphaera gebouwd. Hier stond de zon wel als centraal punt. "
+        BoxLayout:
+            id: infoSunCenteredTextBox
+            Label:
+                id: infoSunCenteredText
+                text_size: 500, None
+                font_size: 20
+                text: "In 1543 publiceerde Nicolaus Copernicus zijn levenswerk met de theorie dat niet de aarde maar de zon centraal stond in de ruimte. De planetariums daarna gebouwd werden hadden weinig weg van het nieuwe wereldbeeld. Later tussen 1662 – 1702 door Steven Tracy werd de Leidsche Sphaera gebouwd. Hier stond de zon wel als centraal punt. "
 
 <InfoRings>:
     canvas.before:
@@ -188,9 +199,9 @@
 
 
     BoxLayout:
+        id: infoRingsBox
         oreintation: 'vertical'
         size: root.size
-        padding: [50, 0, 50, 100]
 
         BoxLayout:
             canvas:
@@ -203,8 +214,10 @@
                     angle_start: 0
                     angle_end: 360
 
-        Label:
-            text_size: self.width, None
-            padding_x: 50
-            font_size: 25
-            text: "Galileo Galilei was de eerste persoon die de ringen van Saturnus heeft geobserveerd echter dacht hij dat het geen ringen waren, maar soort van handels. Later kwam Christiaan Huygens die met zijn eigen telescoop ontdekte dat Saturnus omringt was door ringen die de planeet nergens aanraakt. De ringen bestaan uit ijs en stenen. De stenen zijn stukken komeet, meteoriet en kapotte maan stukken."
+        BoxLayout:
+            id: infoRingsTextBox
+            Label:
+                id: infoRingsText
+                text_size: 500, None
+                font_size: 20
+                text: "Galileo Galilei was de eerste persoon die de ringen van Saturnus heeft geobserveerd echter dacht hij dat het geen ringen waren, maar soort van handels. Later kwam Christiaan Huygens die met zijn eigen telescoop ontdekte dat Saturnus omringt was door ringen die de planeet nergens aanraakt. De ringen bestaan uit ijs en stenen. De stenen zijn stukken komeet, meteoriet en kapotte maan stukken."

@@ -311,17 +311,53 @@ class MyLayout(Widget):
         else:
             self.ids.info_scherm.clear_widgets()
             if nummerNFCreader == 0:
-                self.ids.info_scherm.add_widget(InfoMoon())
+                widget_moon = InfoMoon()
+                widget_moon.ids.infoMoonBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                widget_moon.ids.infoMoonTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                widget_moon.ids.infoMoonText.text_size = (self.size[0] * 0.4, None)
+                if Window.size[0] > 1600:
+                    widget_moon.ids.infoMoonText.font_size = 25
+                self.ids.info_scherm.add_widget(widget_moon)
             if nummerNFCreader == 1:
-                self.ids.info_scherm.add_widget(InfoSaturnMoon())
+                widget_SaturnMoon = InfoSaturnMoon()
+                widget_SaturnMoon.ids.infoSaturnMoonBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                widget_SaturnMoon.ids.infoSaturnMoonTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                widget_SaturnMoon.ids.infoSaturnMoonText.text_size = (self.size[0] * 0.4, None)
+                if Window.size[0] > 1600:
+                    widget_SaturnMoon.ids.infoSaturnMoonText.font_size = 25
+                self.ids.info_scherm.add_widget(widget_SaturnMoon)
             if nummerNFCreader == 2:
-                self.ids.info_scherm.add_widget(InfoTelescoop())
+                widget_telescoop = InfoTelescoop()
+                widget_telescoop.ids.infoTelescoopBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                widget_telescoop.ids.infoTelescoopTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                widget_telescoop.ids.infoTelescoopText.text_size = (self.size[0] * 0.4, None)
+                if Window.size[0] > 1600:
+                    widget_telescoop.ids.infoTelescoopText.font_size = 25
+                self.ids.info_scherm.add_widget(widget_telescoop)
             if nummerNFCreader == 3:
-                self.ids.info_scherm.add_widget(InfoJupiter())
+                widget_Jupiter = InfoJupiter()
+                widget_Jupiter.ids.infoJupiterBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                widget_Jupiter.ids.infoJupiterTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                widget_Jupiter.ids.infoJupiterText.text_size = (self.size[0] * 0.4, None)
+                if Window.size[0] > 1600:
+                    widget_Jupiter.ids.infoJupiterText.font_size = 25
+                self.ids.info_scherm.add_widget(widget_Jupiter)
             if nummerNFCreader == 4:
-                self.ids.info_scherm.add_widget(InfoSunCentered())
+                widget_sun = InfoSunCentered()
+                widget_sun.ids.infoSunCenteredBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                widget_sun.ids.infoSunCenteredTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                widget_sun.ids.infoSunCenteredText.text_size = (self.size[0] * 0.4, None)
+                if Window.size[0] > 1600:
+                    widget_sun.ids.infoSunCenteredText.font_size = 25
+                self.ids.info_scherm.add_widget(widget_sun)
             if nummerNFCreader == 5:
-                self.ids.info_scherm.add_widget(InfoRings())
+                widget_rings = InfoRings()
+                widget_rings.ids.infoRingsBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                widget_rings.ids.infoRingsTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                widget_rings.ids.infoRingsText.text_size = (self.size[0] * 0.4, None)
+                if Window.size[0] > 1600:
+                    widget_rings.ids.infoRingsText.font_size = 25
+                self.ids.info_scherm.add_widget(widget_rings)
 
     def puntenOptellen(self):
         #maximum punten per vraag is 1000. Na 160 seconden minimum punten. Formule is opgezet met 160 seconden
@@ -456,18 +492,54 @@ class MyLayout(Widget):
             for nfcreader in range(len(voorwerpPlaatsen)):
                 if voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 0:
                     #self.ids.info_scherm.clear_widgets()
-                    self.ids.info_scherm.add_widget(InfoMoon())
+                    widget_moon = InfoMoon()
+                    widget_moon.ids.infoMoonBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                    widget_moon.ids.infoMoonTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                    widget_moon.ids.infoMoonText.text_size = (self.size[0] * 0.4, None)
+                    if Window.size[0] > 1600:
+                        widget_moon.ids.infoMoonText.font_size = 25
+                    self.ids.info_scherm.add_widget(widget_moon)
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 1:
                     #self.ids.info_scherm.clear_widgets()
-                    self.ids.info_scherm.add_widget(InfoSaturnMoon())
+                    widget_SaturnMoon = InfoSaturnMoon()
+                    widget_SaturnMoon.ids.infoSaturnMoonBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                    widget_SaturnMoon.ids.infoSaturnMoonTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                    widget_SaturnMoon.ids.infoSaturnMoonText.text_size = (self.size[0] * 0.4, None)
+                    if Window.size[0] > 1600:
+                        widget_SaturnMoon.ids.infoSaturnMoonText.font_size = 25
+                    self.ids.info_scherm.add_widget(widget_SaturnMoon)
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 2:
-                    self.ids.info_scherm.add_widget(InfoTelescoop())
+                    widget_telescoop = InfoTelescoop()
+                    widget_telescoop.ids.infoTelescoopBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                    widget_telescoop.ids.infoTelescoopTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                    widget_telescoop.ids.infoTelescoopText.text_size = (self.size[0] * 0.4, None)
+                    if Window.size[0] > 1600:
+                        widget_telescoop.ids.infoTelescoopText.font_size = 25
+                    self.ids.info_scherm.add_widget(widget_telescoop)
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 3:
-                    self.ids.info_scherm.add_widget(InfoJupiter())
+                    widget_Jupiter = InfoJupiter()
+                    widget_Jupiter.ids.infoJupiterBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                    widget_Jupiter.ids.infoJupiterTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                    widget_Jupiter.ids.infoJupiterText.text_size = (self.size[0] * 0.4, None)
+                    if Window.size[0] > 1600:
+                        widget_Jupiter.ids.infoJupiterText.font_size = 25
+                    self.ids.info_scherm.add_widget(widget_Jupiter)
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 4:
-                    self.ids.info_scherm.add_widget(InfoSunCentered())
+                    widget_sun = InfoSunCentered()
+                    widget_sun.ids.infoSunCenteredBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                    widget_sun.ids.infoSunCenteredTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                    widget_sun.ids.infoSunCenteredText.text_size = (self.size[0] * 0.4, None)
+                    if Window.size[0] > 1600:
+                        widget_sun.ids.infoSunCenteredText.font_size = 25
+                    self.ids.info_scherm.add_widget(widget_sun)
                 elif voorwerpPlaatsen[nfcreader] == 0 and nfcreader == 5:
-                    self.ids.info_scherm.add_widget(InfoRings())
+                    widget_rings = InfoRings()
+                    widget_rings.ids.infoRingsBox.padding = [self.size[0] * 0.1, 0, 50, 100]
+                    widget_rings.ids.infoRingsTextBox.padding = [self.size[0] * 0.2, 0, 0, 0]
+                    widget_rings.ids.infoRingsText.text_size = (self.size[0] * 0.4, None)
+                    if Window.size[0] > 1600:
+                        widget_rings.ids.infoRingsText.font_size = 25
+                    self.ids.info_scherm.add_widget(widget_rings)
         elif voorwerpPlaatsen.count(0) == 0:
             self.popup.dismiss()
             self.ids.info_scherm.clear_widgets()
