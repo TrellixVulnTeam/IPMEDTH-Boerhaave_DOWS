@@ -59,8 +59,8 @@ questions = ['Wat heeft Galileo Galilei ontdekt met zijn eerste telescoop?',
 'De Leidsche Sphaera is nagebouwd met dit nieuwe wereldbeeld, wat was het voor wereldbeeld?',
 'Dit was voor het eerst geobserveerd door Galileo Galilei, wat was dat?',
 'Dit bestaat uit stenen stukken komeet, meteoriet en kapotte maanstukken, wat is dit?']
-#antwoordeVragen = ['mn','mn','sn','sn','ts','ts','jm','jm','sc','sc','rs','rs']
-antwoordeVragen = ['ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts']
+antwoordeVragen = ['mn','mn','sn','sn','ts','ts','jm','jm','sc','sc','rs','rs']
+#antwoordeVragen = ['ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts']
 
 
 class RedCircle(Widget):
@@ -110,7 +110,7 @@ class MyLayout(Widget):
         self.popup = ModalView(size_hint=(None, None))
 
         #start inactive timer. Timer staat normaal op 300 seconden
-        seconden_wachten_inactie = 5
+        seconden_wachten_inactie = 300
         self.inactive_reset_timer = Clock.create_trigger(self.inactiveRestTimer, seconden_wachten_inactie)
         self.inactive_reset_timer()
 
