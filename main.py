@@ -59,8 +59,8 @@ questions = ['Wat heeft Galileo Galilei ontdekt met zijn eerste telescoop?',
 'De Leidsche Sphaera is nagebouwd met dit nieuwe wereldbeeld, wat was het voor wereldbeeld?',
 'Dit was voor het eerst geobserveerd door Galileo Galilei, wat was dat?',
 'Dit bestaat uit stenen stukken komeet, meteoriet en kapotte maanstukken, wat is dit?']
-antwoordeVragen = ['mn','mn','sn','sn','ts','ts','jm','jm','sc','sc','rs','rs']
-#antwoordeVragen = ['ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts']
+#antwoordeVragen = ['mn','mn','sn','sn','ts','ts','jm','jm','sc','sc','rs','rs']
+antwoordeVragen = ['ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts']
 
 
 class RedCircle(Widget):
@@ -149,7 +149,7 @@ class MyLayout(Widget):
 
     def tienrandom(self):
       randomvragen = []
-      maximum_questions = 5
+      maximum_questions = 2
       randomlist = random.sample(range(0, len(questions)), maximum_questions)
       for item in randomlist:
         randomvragen.append(questions[item])
@@ -164,7 +164,7 @@ class MyLayout(Widget):
             Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
         victoryPopup.ids.victoryLayout.size = self.size[0] / 2, self.size[1] / 2
         victoryPopup.ids.victoryLayout.pos = self.center_x / 2, self.center_y / 2
-        victoryPopup.ids.victoryPuntenLabel.text = f"Punten: {self.totalPunten}"
+        victoryPopup.ids.victoryPuntenLabel.text = f"Totale punten: {self.totalPunten}"
         return victoryPopup
 
     #Deze functie maakt de restart Popup. In de functie staat de afmetingen. Verder code in restart.kv
@@ -187,6 +187,8 @@ class MyLayout(Widget):
         puntenPopup.ids.puntenWindow.pos = self.center_x / 2, self.center_y / 2
         puntenPopup.ids.PuntenVerdientLabel.text = f"Punten erbij: +{punten}"
         puntenPopup.ids.totaalPuntenLabel.text = f"Punten totaal: {self.totalPunten}"
+        #punten bovenin vragen veranderen
+        self.ids.punten_bovenin.text = f"Punten: {self.totalPunten}"
         return puntenPopup
 
     def closePopup(self, dt):
@@ -219,6 +221,7 @@ class MyLayout(Widget):
             #maakt de victory popup TODO: Layout maken
             self.victoryScreen = ModalView(size_hint=(None, None))
             self.victoryScreen.add_widget(self.create_Victory_Popup())
+            print(self.victoryScreen)
             self.victoryScreen.open()
             #automisch de popup weghalen na 5 seconden
             Clock.schedule_once(self.closePopup, 5)
@@ -233,6 +236,8 @@ class MyLayout(Widget):
         self.ids.my_label.value = 1
         self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
         self.totalPunten = 0
+        self.ids.punten_bovenin.text = f"Punten: {self.totalPunten}"
+
 
     def lichtAanzetten(self, nummerNFCreader):
         if nummerNFCreader == 0:
