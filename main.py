@@ -188,6 +188,7 @@ class MyLayout(Widget):
             Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
         restartPopup.ids.restartLayout.size = self.size[0] / 2, self.size[1] / 2
         restartPopup.ids.restartLayout.pos = self.center_x / 2, self.center_y / 2
+        restartPopup.ids.restartLayoutText.text_size = self.size[0] / 2, None
         return restartPopup
 
     #Deze functie maakt de punten Popup. In de functie staat de afmetingen. Verder code in vraagGoed.kv
