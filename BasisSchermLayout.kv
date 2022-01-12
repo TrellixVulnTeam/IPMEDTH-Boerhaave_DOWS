@@ -28,7 +28,7 @@
         size_hint_y: None
         height: dp(300)
 
-        padding: dp(100)
+        padding: [100, 30, 100, 50]
         spacing: dp(50)
 
         canvas:
@@ -40,44 +40,49 @@
 
         Label:
           id: punten_bovenin
-          font_size: 30
+          font_size: 32
           text: "Punten: 0"
 
-        ProgressBar:
-          id: my_progress_bar
-          value: .20
-          min: 0
-          max: 1
-          size_hint_x: 1
+        BoxLayout:
+          padding: [0, -30, 0, 0]
+          ProgressBar:
+            id: my_progress_bar
+            value: .20
+            min: 0
+            max: 1
+            size_hint_x: 1
 
 
-          canvas:
-            BorderImage:
-              border: (12, 12, 12, 12)
-              pos: self.x, self.center_y - 12
-              size: self.width, 24
-              source: 'images/background_color_pb.png'
-            BorderImage:
-              border: [int(min(self.width * (self.value / float(self.max)) if self.max else 0, 12))] * 4
-              pos: self.x, self.center_y - 12
-              size: self.width * (self.value / float(self.max)) if self.max else 0, 24
-              source: 'images/progress_color_pb.png'
+            canvas:
+              BorderImage:
+                border: (12, 12, 12, 12)
+                pos: self.x, self.center_y - 12
+                size: self.width, 24
+                source: 'images/background_color_pb.png'
+              BorderImage:
+                border: [int(min(self.width * (self.value / float(self.max)) if self.max else 0, 12))] * 4
+                pos: self.x, self.center_y - 12
+                size: self.width * (self.value / float(self.max)) if self.max else 0, 24
+                source: 'images/progress_color_pb.png'
 
-        Label:
-          id: my_label
-          text: 'Vraag 1'
-          font_size: dp(32)
-          value: 1
+        BoxLayout:
+          padding: [0, -60, 0,0]
+          Label:
+            id: my_label
+            text: 'Vraag 1 / 5'
+            font_size: 35
+            size: 400, 500
+            value: 1
 
-
-        Label:
-          id: my_label_question
-          text: 'Wie heeft een telescoop lens uit gevonden?'
-          text_size: self.width, None
-          font_size: dp(40)
-          valign: 'middle'
-          halign: 'center'
-          value: 1
+        BoxLayout:
+          padding: [0, -10, 0 ,0]
+          Label:
+            id: my_label_question
+            text: 'Wie heeft een telescoop lens uit gevonden?'
+            text_size: self.width, None
+            font_size: dp(35)
+            valign: 'middle'
+            halign: 'center'
 
       BoxLayout:
         orientation: 'horizontal'
@@ -105,53 +110,26 @@
             pos: self.pos
             size: self.size
 
-        AnchorLayout:
-          size_hint_y: None
-          height: dp(200)
-          pos_hint: {'x': 0, 'top': 1}
-          anchor_x: 'center'
-          anchor_y: 'bottom'
-
-          # canvas:
-          #   Color:
-          #     rgba: (1,1,0,1)
-          #   Rectangle:
-          #     pos: self.pos
-          #     size: self.size
+        GridLayout:
+          cols: 1
+          id: intro
+          paddings: [0, 400, 0, 10]
+          size: self.size
+          pos: self.pos
 
           Label:
             text: 'Vind het juiste object bij de vraag'
-            font_size: dp(54)
+            halign: 'center'
+            valign: 'middle'
+            font_size: dp(50)
             size_hint_y: None
             height: dp(100)
-
-        AnchorLayout:
-          pos_hint: {'x': 0, 'top': 1}
-          anchor_x: 'center'
-          anchor_y: 'center'
-
-          # canvas:
-          #   Color:
-          #     rgba: (1,0,1,1)
-          #   Rectangle:
-          #     pos: self.pos
-          #     size: self.size
+            text_size: self.width, None
 
           Label:
-            text_size: self.width, None
             halign: 'center'
             valign: 'middle'
             text: 'Als u een object op pakt krijgt u extra informatie op het scherm'
-            font_size: dp(96)
+            font_size: dp(50)
             size_hint_y: None
-            height: dp(100)
-
-        Button:
-          text: 'Press Me!'
-          size_hint_x: None
-          width: dp(700)
-
-          size_hint_y: None
-          height: dp(100)
-
-          on_press: root.press_it()
+            text_size: self.width, None

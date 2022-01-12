@@ -117,6 +117,10 @@ class MyLayout(Widget):
         self.pointTimer = 0
         Clock.schedule_interval(self.increasePointTimer, 1)
 
+        #set de introductie tekst
+        self.startup = Clock.create_trigger(self.setIntruduction, 0.1)
+        self.startup()
+
     #functie die vragen reset na een lange tijd van inactie
     def inactiveRestTimer(self, dt):
         print("inactie")
@@ -149,7 +153,7 @@ class MyLayout(Widget):
 
     def tienrandom(self):
       randomvragen = []
-      maximum_questions = 2
+      maximum_questions = 5
       randomlist = random.sample(range(0, len(questions)), maximum_questions)
       for item in randomlist:
         randomvragen.append(questions[item])
@@ -166,6 +170,15 @@ class MyLayout(Widget):
         victoryPopup.ids.victoryLayout.pos = self.center_x / 2, self.center_y / 2
         victoryPopup.ids.victoryPuntenLabel.text = f"Totale punten: {self.totalPunten}"
         return victoryPopup
+
+    def setIntruduction(self, dt):
+        self.ids.info_scherm.clear_widgets()
+        # Instructie widget maken en de afmetingen meegeven
+        instructions = Instruction()
+        instructions.ids.intro.size = (self.size[0] * 0.9, self.height * 0.5)
+        instructions.ids.intro.padding = (self.size[0] * 0.1, 50, 0, 0)
+        self.ids.info_scherm.add_widget(instructions)
+
 
     #Deze functie maakt de restart Popup. In de functie staat de afmetingen. Verder code in restart.kv
     def createRestartPopup(self):
