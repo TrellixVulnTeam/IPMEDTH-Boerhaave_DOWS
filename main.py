@@ -12,7 +12,7 @@ from kivy.graphics import Color, Rectangle, Canvas
 from kivy.properties import StringProperty, ObjectProperty
 
 import serial
-import time
+#import time
 import random
 
 """
