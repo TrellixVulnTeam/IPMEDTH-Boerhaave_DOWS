@@ -175,8 +175,11 @@ class MyLayout(Widget):
         self.ids.info_scherm.clear_widgets()
         # Instructie widget maken en de afmetingen meegeven
         instructions = Instruction()
-        instructions.ids.intro.size = (self.size[0] * 0.9, self.height * 0.5)
+        instructions.ids.intro.size = (self.size[0] * 0.9, self.height * 0.6)
         instructions.ids.intro.padding = (self.size[0] * 0.1, 50, 0, 0)
+        if Window.size[0] < 1600:
+            instructions.ids.instructionsPartOne.font_size = 30
+            instructions.ids.instructionsPartTwo.font_size = 25
         self.ids.info_scherm.add_widget(instructions)
 
 
@@ -572,13 +575,14 @@ class MyLayout(Widget):
                         widget_rings.ids.infoRingsText.line_height = 1.2
                     self.ids.info_scherm.add_widget(widget_rings)
         elif voorwerpPlaatsen.count(0) == 0:
-            self.popup.dismiss()
-            self.ids.info_scherm.clear_widgets()
+            self.setIntruduction(0.1)
+        #    self.popup.dismiss()
+        #    self.ids.info_scherm.clear_widgets()
             # Instructie widget maken en de afmetingen meegeven
-            instructions = Instruction()
-            instructions.ids.intro.size = (self.size[0] * 0.9, self.height * 0.5)
-            instructions.ids.intro.padding = (self.size[0] * 0.1, 50, 0, 0)
-            self.ids.info_scherm.add_widget(instructions)
+        #    instructions = Instruction()
+        #    instructions.ids.intro.size = (self.size[0] * 0.9, self.height * 0.5)
+        #    instructions.ids.intro.padding = (self.size[0] * 0.1, 50, 0, 0)
+        #    self.ids.info_scherm.add_widget(instructions)
         else:
             self.checkErr()
 

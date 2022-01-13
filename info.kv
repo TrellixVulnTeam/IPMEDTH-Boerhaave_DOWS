@@ -3,23 +3,25 @@
         cols: 1
         id: intro
         size: self.size
-        padding: [0, 500, 0 , 0]
+        padding: [0, 400, 0 , 0]
         pos: self.pos
 
         Label:
-            text: 'Vind het juiste object bij de vraag. Als u een object op pakt krijgt u extra informatie op het scherm'
+            id: instructionsPartOne
+            text: 'Vind het juiste object bij de vraag. Als u een object op pakt krijgt u extra informatie op het scherm.'
             halign: 'center'
             valign: 'middle'
-            font_size: dp(50)
+            font_size: 40
             size_hint_y: None
-            height: dp(200)
+            height: 200
             text_size: self.width, None
 
         Label:
+            id: instructionsPartTwo
             halign: 'center'
             valign: 'middle'
             text: 'Denkt u dat het object het antwoord is op de vraag zet het dan op het antwoordvlak. Als het niet het goede antwoord is zet het object dan weer terug op zijn plek.'
-            font_size: dp(50)
+            font_size: 40
             size_hint_y: None
             text_size: self.width, None
             #height: 100
