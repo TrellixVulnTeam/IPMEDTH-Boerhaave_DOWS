@@ -44,6 +44,7 @@ Builder.load_file('error.kv')
 Builder.load_file('victory.kv')
 Builder.load_file('restart.kv')
 Builder.load_file('vraagGoed.kv')
+Builder.load_file('fout.kv')
 
 voorwerpPlaatsen = [1,1,1,1,1,1]
 voorwerpNamen = ["Maan Kraters", "Maan Saturnus", "Telescoop", "Manen Jupiter", "Sun-centered", "Ringen Saturnus"]
@@ -93,6 +94,8 @@ class RestartPopup(Widget):
     pass
 class PuntenPopup(Widget):
     pass
+class FoutPopup(Widget):
+    pass
 
 
 
@@ -131,26 +134,6 @@ class MyLayout(Widget):
     def increasePointTimer(self, dt):
         self.pointTimer += 1
 
-    def press_it(self):
-        current = self.ids.my_progress_bar.value
-        current_question = self.ids.my_label.value
-
-        if current == 1:
-          current = 0
-
-        if current_question == 5:
-          current_question = 0
-
-        current += .20
-        current_question += 1
-        #delete de voorste vraag en pakt set de label voor nieuwe vraag
-        self.vragen.pop(0)
-        self.ids.my_label_question.text = self.vragen[0]
-
-        self.ids.my_progress_bar.value = current
-        self.ids.my_label.value = current_question
-        self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
-
     def tienrandom(self):
       randomvragen = []
       maximum_questions = 5
@@ -179,7 +162,7 @@ class MyLayout(Widget):
         instructions.ids.intro.padding = (self.size[0] * 0.1, 50, 0, 0)
         if Window.size[0] < 1600:
             instructions.ids.instructionsPartOne.font_size = 30
-            instructions.ids.instructionsPartTwo.font_size = 25
+            instructions.ids.instructionsPartTwo.font_size = 30
         self.ids.info_scherm.add_widget(instructions)
 
 
@@ -193,6 +176,15 @@ class MyLayout(Widget):
         restartPopup.ids.restartLayout.pos = self.center_x / 2, self.center_y / 2
         restartPopup.ids.restartLayoutText.text_size = self.size[0] / 2, None
         return restartPopup
+
+    def createVraagFoutPopup(self):
+        foutPopup = FoutPopup()
+        with foutPopup.ids.foutLayout.canvas.before:
+            Color(0.1,0.1,0.1, 1)
+            Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
+        foutPopup.ids.foutLayout.size = self.size[0] / 2, self.size[1] / 2
+        foutPopup.ids.foutLayout.pos = self.center_x / 2, self.center_y / 2
+        return foutPopup
 
     #Deze functie maakt de punten Popup. In de functie staat de afmetingen. Verder code in vraagGoed.kv
     def createVraagGooedPopup(self, punten):
@@ -213,6 +205,9 @@ class MyLayout(Widget):
 
     def closePuntenPopup(self, dt):
         self.puntenWindow.dismiss()
+
+    def closeFoutPopup(self, dt):
+        self.foutWindow.dismiss()
 
     def next_question(self):
         if len(self.vragen) > 1:
@@ -255,7 +250,7 @@ class MyLayout(Widget):
         self.totalPunten = 0
         self.ids.punten_bovenin.text = f"Punten: {self.totalPunten}"
 
-
+    #set de juiste lichten als een voorwerp wordt opgepakt
     def lichtAanzetten(self, nummerNFCreader):
         if nummerNFCreader == 0:
             GPIO.output(led_mn, GPIO.HIGH)
@@ -278,9 +273,7 @@ class MyLayout(Widget):
             if isinstance(App.get_running_app().root_window.children[0], Popup):
                 App.get_running_app().root_window.children[0].dismiss()
             #maakt de layout van de pop
-
             popupLayout = ErrorPopUp()
-
             layout = GridLayout(cols= 3, size_hint=(0.6, 0.7))
             #voegt de achtergrond toe aan de popup
             with layout.canvas.before:
@@ -420,7 +413,13 @@ class MyLayout(Widget):
                 self.next_question()
             else:
                 #GPIO.output(led_antwoord_fout, GPIO.HIGH)
-                print("TODO: fout")
+                self.foutWindow = ModalView(size_hint=(None, None))
+                self.foutWindow.add_widget(self.createVraagFoutPopup())
+                self.foutWindow.open()
+                #automatisch de popup weghalen
+                Clock.schedule_once(self.closeFoutPopup, 3)
+
+
 
 
     def closeRestartPopup(self, dt):
