@@ -22,8 +22,6 @@ bool buttonPressed = false;
 void setup() {
   Serial.begin(9600);
   SPI.begin(); // init SPI bus
-//  rfid.PCD_Init(); // init MFRC522
-  //second_rfid.PCD_Init();
 
   for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
     mfrc522[reader].PCD_Init(ssPins[reader], RST_PIN);
@@ -31,7 +29,6 @@ void setup() {
     Serial.print(reader);
     Serial.print(F(": "));
     mfrc522[reader].PCD_DumpVersionToSerial();
-    //mfrc522[reader].PCD_SetAntennaGain(mfrc522[reader].RxGain_max);
   }
 
   for(int i = 0; i < sizeof(statusReaders); i++){
@@ -42,15 +39,16 @@ void setup() {
   pinMode(pushButton, INPUT);
 }
 
+//krijgt een NFC-chip id binnen met een nfc reader ID en kijkt of de chip ID overheen komt met een gehardcode ID
 void check_code(String code, uint8_t numberReader){
   String arduinoMessage;
- // Serial.println(code);
   //checkt of het de laatste nfc reader (antwoord) en zet de naam van de nfcreader in de message
   if(numberReader == (NR_OF_READERS - 1)){
      arduinoMessage = "a";
   }else{
      arduinoMessage = String(numberReader);
   }
+  //alle ge-hardcoded NFC chip IDs
   if(code == " 04 77 42 7c b0 e9 30"){
     arduinoMessage = arduinoMessage + "_mn";
   }else if(code == " 04 77 42 ca c1 e4 30"){
@@ -61,7 +59,6 @@ void check_code(String code, uint8_t numberReader){
      arduinoMessage = arduinoMessage + "_jm";
   }else if(code == " 04 77 42 b7 aa e3 30"){
      arduinoMessage = arduinoMessage + "_sc";
-     //arduinoMessage = arduinoMessage + "_sn";
   }else if(code == " 04 77 42 fb 87 df 30"){
      arduinoMessage = arduinoMessage + "_rs";
   }else{
@@ -70,6 +67,7 @@ void check_code(String code, uint8_t numberReader){
   Serial.println(arduinoMessage);
 }
 
+//krijgt de byte message van NFC-reader binnen en zet dit bericht om naar een String
 void translate_input(byte * buffer, byte bufferSize, uint8_t numberReader ){
   String NFCCode = "";
    for (int i = 0; i < bufferSize; i++) {
@@ -79,6 +77,7 @@ void translate_input(byte * buffer, byte bufferSize, uint8_t numberReader ){
     check_code(NFCCode, numberReader);
 }
 
+//verstuurt reset naar de Pi & leest alle NFC-readers een keer door
 void resetScan(){
   Serial.println("reset");
   for(uint8_t reader = 0; reader < NR_OF_READERS; reader++){
@@ -134,7 +133,8 @@ void loop() {
             mfrc522[reader].PCD_StopCrypto1(); // stop encryption on PCD
             }
         }
-      }else{
+      }
+      else{
           if(statusReaders[reader] == true){
             //checkt of het de laatste nfc reader (antwoord) en maakt bericht welk reader een voorwerp opgetild is
             if(reader == (NR_OF_READERS - 1))

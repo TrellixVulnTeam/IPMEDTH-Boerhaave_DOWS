@@ -105,7 +105,7 @@ class MyLayout(Widget):
         self.newReset = False
         self.totalPunten = 0
         #selecteer 5 vragen
-        self.vragen = self.tienrandom()
+        self.vragen = self.vragenSelectie()
         self.ids.my_label_question.text = self.vragen[0]
         #set timer voor arduino
         refresh_time = 0.5
@@ -134,7 +134,8 @@ class MyLayout(Widget):
     def increasePointTimer(self, dt):
         self.pointTimer += 1
 
-    def tienrandom(self):
+    #createert een selectie van "5" vragen uit de vragen leest
+    def vragenSelectie(self):
       randomvragen = []
       maximum_questions = 5
       randomlist = random.sample(range(0, len(questions)), maximum_questions)
@@ -143,7 +144,7 @@ class MyLayout(Widget):
       return randomvragen
 
 
-    #Deze functie maakt de Victory Popup. In de functie staat de afmetingen. Verder code in victory.kv
+    #Deze functie maakt de Victory Popup. In de functie staat de afmetingen. layout in victory.kv
     def create_Victory_Popup(self):
         victoryPopup = VictoryPopup()
         with victoryPopup.ids.victoryLayout.canvas.before:
@@ -154,6 +155,7 @@ class MyLayout(Widget):
         victoryPopup.ids.victoryPuntenLabel.text = f"Totale punten: {self.totalPunten}"
         return victoryPopup
 
+    #Maakt de introductie resonspive en set deze op het scherm. layout in info.kv
     def setIntruduction(self, dt):
         self.ids.info_scherm.clear_widgets()
         # Instructie widget maken en de afmetingen meegeven
@@ -166,7 +168,7 @@ class MyLayout(Widget):
         self.ids.info_scherm.add_widget(instructions)
 
 
-    #Deze functie maakt de restart Popup. In de functie staat de afmetingen. Verder code in restart.kv
+    #Deze functie maakt de restart Popup. In de functie staat de afmetingen. Verder layout in restart.kv
     def createRestartPopup(self):
         restartPopup = RestartPopup()
         with restartPopup.ids.restartLayout.canvas.before:
@@ -177,6 +179,7 @@ class MyLayout(Widget):
         restartPopup.ids.restartLayoutText.text_size = self.size[0] / 2, None
         return restartPopup
 
+    #creeert een responsive fout antwoord melding en plaats deze op het scherm. Vind layout in fout.kv
     def createVraagFoutPopup(self):
         foutPopup = FoutPopup()
         with foutPopup.ids.foutLayout.canvas.before:
@@ -200,7 +203,7 @@ class MyLayout(Widget):
         self.ids.punten_bovenin.text = f"Punten: {self.totalPunten}"
         return puntenPopup
 
-    def closePopup(self, dt):
+    def closeVictoryPopup(self, dt):
         self.victoryScreen.dismiss()
 
     def closePuntenPopup(self, dt):
@@ -209,19 +212,19 @@ class MyLayout(Widget):
     def closeFoutPopup(self, dt):
         self.foutWindow.dismiss()
 
+    #selecteert nieuwe vraag en plaats op scherm, set progressbar verder & maakt victory popup
     def next_question(self):
         if len(self.vragen) > 1:
+            #set progressbar verder
             current = self.ids.my_progress_bar.value
             current_question = self.ids.my_label.value
-
             if current == 1:
               current = 0
-
             if current_question == 5:
               current_question = 0
-
             current += .20
             current_question += 1
+
             #delete de voorste vraag en pakt set de label voor nieuwe vraag
             self.vragen.pop(0)
             self.ids.my_label_question.text = self.vragen[0]
@@ -230,19 +233,20 @@ class MyLayout(Widget):
             self.ids.my_label.value = current_question
             self.ids.my_label.text = f'Vraag {self.ids.my_label.value} / 5'
         else:
-            #maakt de victory popup TODO: Layout maken
+            #set Victory popup op het scherm
             self.victoryScreen = ModalView(size_hint=(None, None))
             self.victoryScreen.add_widget(self.create_Victory_Popup())
             print(self.victoryScreen)
             self.victoryScreen.open()
             #automisch de popup weghalen na 5 seconden
-            Clock.schedule_once(self.closePopup, 5)
+            Clock.schedule_once(self.closeVictoryPopup, 5)
 
             #restart
             self.resetVragen()
 
+    #reset de quiz en begint opnieuw
     def resetVragen(self):
-        self.vragen = self.tienrandom()
+        self.vragen = self.vragenSelectie()
         self.ids.my_label_question.text = self.vragen[0]
         self.ids.my_progress_bar.value = 0.20
         self.ids.my_label.value = 1
@@ -280,8 +284,6 @@ class MyLayout(Widget):
                 Color(0, 1,  0, 0.25)
                 Rectangle(size=(layout.size))
 
-
-            #self.popup = ModalView(size_hint=(None, None))
             with popupLayout.ids.backgrounderror.canvas.before:
                 Color(0.1,0.1,0.1, 1)
                 Rectangle(pos=(self.center_x / 2, self.center_y / 2), size=(self.size[0] / 2, self.size[1] / 2))
@@ -317,8 +319,6 @@ class MyLayout(Widget):
     #als een voorwerp wordt opgepakt, checkt welk voorwerp het is en of er teveel zijn opgetild
     def optillenVoorwerpCheck(self, nummerNFCreader):
         voorwerpPlaatsen[nummerNFCreader] = 0
-        #self.lichtAanzetten(nummerNFCreader)
-
         #als er meer dan 2 voorwerpen zijn opgetilt, ga naar error scherm
         if voorwerpPlaatsen.count(0) > 1:
             self.checkErr()
@@ -421,11 +421,11 @@ class MyLayout(Widget):
 
 
 
-
+    #doet de restartpopup dicht en restart de vragen
     def closeRestartPopup(self, dt):
         self.restartScreen.dismiss()
         #restart vragen
-        self.vragen = self.tienrandom()
+        self.vragen = self.vragenSelectie()
         self.ids.my_label_question.text = self.vragen[0]
         self.ids.my_progress_bar.value = 0.20
         self.ids.my_label.value = 1
@@ -440,9 +440,6 @@ class MyLayout(Widget):
         if self.newReset:
             self.pointTimer = 0
             self.newReset = False
-            print("correct reset")
-
-
 
         #als het met een a begint, dan gaat het om de antwoord reader
         if(message[0] == 'a'):
@@ -575,13 +572,6 @@ class MyLayout(Widget):
                     self.ids.info_scherm.add_widget(widget_rings)
         elif voorwerpPlaatsen.count(0) == 0:
             self.setIntruduction(0.1)
-        #    self.popup.dismiss()
-        #    self.ids.info_scherm.clear_widgets()
-            # Instructie widget maken en de afmetingen meegeven
-        #    instructions = Instruction()
-        #    instructions.ids.intro.size = (self.size[0] * 0.9, self.height * 0.5)
-        #    instructions.ids.intro.padding = (self.size[0] * 0.1, 50, 0, 0)
-        #    self.ids.info_scherm.add_widget(instructions)
         else:
             self.checkErr()
 
@@ -598,7 +588,9 @@ if __name__ == '__main__':
   Config.set('graphics', 'window_state', 'maximized')
   Config.write()
   #setup van de serial poort waar de pi naar luistert
+  #pc versie
   ser = serial.Serial('COM4', 9600, timeout=1)
+  #Raspberry pi versie
   #ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
   ser.reset_input_buffer()
   MyApp().run()
