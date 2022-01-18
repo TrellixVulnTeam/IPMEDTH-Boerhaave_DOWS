@@ -449,8 +449,9 @@ class MyLayout(Widget):
             self.restartScreen = ModalView(size_hint=(None, None))
             self.restartScreen.add_widget(self.createRestartPopup())
             self.restartScreen.open()
-            #automisch de popup weghalen na 5 seconden
+            #automisch de popup weghalen na 3 seconden
             Clock.schedule_once(self.closeRestartPopup, 3)
+            self.resetVragen()
         else:
             #filtert op slechte inputs. Alleen inputs van de arduino dat begint met een nummer of a worden toegelaten
             try:

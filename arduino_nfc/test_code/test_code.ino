@@ -23,7 +23,7 @@ void loop() {
    */
 
   //Error_Oppak_test
-  /*
+
   Serial.println("0_none");
   delay(2000);
   Serial.println("2_none");
@@ -34,10 +34,10 @@ void loop() {
   delay(2000);
   Serial.println("5_rs");
   delay(2000);
-   */
+   
 
 //Doorloop_test
-/*
+  /*
   //Geeft telkens het "fake" antwoord met verschillende tijd er tussen
    Serial.println("a_ts");
    delay(5000);
@@ -56,9 +56,9 @@ void loop() {
 /*
  //Beantwoord twee vragen en geeft het reset command naar de Pi
   Serial.println("a_ts");
-  delay(3000);
+  delay(5000);
   Serial.println("a_ts");
-  delay(3000);
+  delay(5000);
   Serial.println("reset");
   delay(8000);
   */
