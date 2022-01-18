@@ -52,7 +52,7 @@ questions = ['Wat heeft Galileo Galilei ontdekt met zijn eerste telescoop?',
 'Deze rots is niet helemaal rond, maar door meteorieten en vulkanen is de planeet zo geworden, om welke planeet gaat het hier? ',
 'Welke maan heeft Christiaan Huygens ontdekt?',
 'Wat is de nieuwe maan van Saturnus die ontdekt is?',
-'Door Hans Lippenshey werd dit ding voor het eerst gebouwd in 1608, om welk ding gaat het?',
+'Door Hans Lippenshey werd dit apparaat voor het eerst gebouwd in 1608, om welk ding gaat het?',
 'Galileo Galilei heeft deze zelf een gebouw om ontdekkingen mee te doen, wat is het?',
 'De namen van deze planeten zijn Io, Ganymedes, Europa en Callisto wat zijn dit?',
 'Het leek op een groep sterren, maar was het uiteindelijk niet was waren ze wel?',
@@ -60,8 +60,8 @@ questions = ['Wat heeft Galileo Galilei ontdekt met zijn eerste telescoop?',
 'De Leidsche Sphaera is nagebouwd met dit nieuwe wereldbeeld, wat was het voor wereldbeeld?',
 'Dit was voor het eerst geobserveerd door Galileo Galilei, wat was dat?',
 'Dit bestaat uit stenen stukken komeet, meteoriet en kapotte maanstukken, wat is dit?']
-#antwoordeVragen = ['mn','mn','sn','sn','ts','ts','jm','jm','sc','sc','rs','rs']
-antwoordeVragen = ['ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts']
+antwoordeVragen = ['mn','mn','sn','sn','ts','ts','jm','jm','sc','sc','rs','rs']
+#antwoordeVragen = ['ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts','ts']
 
 
 class RedCircle(Widget):

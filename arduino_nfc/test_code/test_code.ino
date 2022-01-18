@@ -15,6 +15,13 @@ void loop() {
  Serial.println("a_ts");
   delay(1000); */
 
+  //Autoreset_test
+  /*
+  Serial.println("a_ts");
+  delay(301000);
+
+   */
+
   //Error_Oppak_test
   /*
   Serial.println("0_none");
